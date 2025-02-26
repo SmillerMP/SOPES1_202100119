@@ -7,10 +7,8 @@
 #include <linux/delay.h>
 #include <linux/workqueue.h>
 #include <linux/sched/signal.h>
-#include <linux/sysinfo.h>
-#include <linux/uaccess.h>
 #include <linux/mm.h>
-
+#include <linux/uaccess.h>
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Monitor en tiempo real de CPU y RAM");
@@ -18,8 +16,9 @@ MODULE_AUTHOR("Samuel Isaí Muñoz Pereira");
 
 static struct delayed_work cpu_work;
 static struct workqueue_struct *cpu_queue;
-static int cpu_usage = 0;  
+static int cpu_usage = 0;  // Variable global para el uso del CPU
 
+// Variables para almacenar la última lectura de CPU
 static int prev_total = 0, prev_idle = 0;
 
 // Función para leer `/proc/stat` y calcular el uso del CPU
@@ -70,65 +69,44 @@ static void update_cpu_usage(struct work_struct *work) {
     queue_delayed_work(cpu_queue, &cpu_work, msecs_to_jiffies(1000));
 }
 
-// Función para calcular el porcentaje de memoria usado por un proceso
-static int calcularPorcentajeRAM(pid_t pid) {
-    struct file *archivo;
-    char buf[512];
-    int memoria_total, vmrss;
-    char *linea;
-    int ret;
+// Función para obtener la memoria RAM (total, libre y en uso)
+static void get_memory_usage(unsigned long *total, unsigned long *libre, unsigned long *uso) {
+    // Obtener memoria total del sistema en MB
+    *total = ((global_node_page_state(NR_INACTIVE_ANON) +
+               global_node_page_state(NR_ACTIVE_ANON) +
+               global_node_page_state(NR_INACTIVE_FILE) +
+               global_node_page_state(NR_ACTIVE_FILE) +
+               global_node_page_state(NR_UNEVICTABLE)) * PAGE_SIZE) / (1024 * 1024);
 
-    struct sysinfo info;
-    si_meminfo(&info);
-    memoria_total = info.totalram * info.mem_unit;
+    *libre = (global_zone_page_state(NR_FREE_PAGES) * PAGE_SIZE) / (1024 * 1024);
 
-    char path[64];
-    snprintf(path, sizeof(path), "/proc/%d/status", pid);
-
-    archivo = filp_open(path, O_RDONLY, 0);
-    if (IS_ERR(archivo)) {
-        printk(KERN_INFO "Error al abrir el archivo /proc/%d/status\n", pid);
-        return -1;
-    }
-
-    memset(buf, 0, sizeof(buf));
-    kernel_read(archivo, buf, sizeof(buf) - 1, &archivo->f_pos);
-    filp_close(archivo, NULL);
-
-    linea = strstr(buf, "VmRSS:");
-    if (linea) {
-        ret = sscanf(linea, "VmRSS: %d kB", &vmrss);
-        if (ret != 1) {
-            printk(KERN_INFO "Error al leer VmRSS para el proceso %d\n", pid);
-            return -1;
-        }
-        return (vmrss * 100) / (memoria_total / 1024);
-    }
-
-    return -1;
+    *uso = *total - *libre;
 }
 
 // Función para escribir en `/proc/sysinfo_202100119`
 static int write_file(struct seq_file *archivo, void *v) {
     struct task_struct *task;
+    unsigned long total_mem, free_mem, used_mem;
+
+    // Obtener datos de memoria RAM
+    get_memory_usage(&total_mem, &free_mem, &used_mem);
 
     seq_printf(archivo, "{\n");
     seq_printf(archivo, "  \"percentage_used\": %d,\n", cpu_usage);
+    seq_printf(archivo, "  \"memory\": {\n");
+    seq_printf(archivo, "    \"total\": %lu,\n", total_mem);
+    seq_printf(archivo, "    \"free\": %lu,\n", free_mem);
+    seq_printf(archivo, "    \"used\": %lu\n", used_mem);
+    seq_printf(archivo, "  },\n");
     seq_printf(archivo, "  \"tasks\": [\n");
 
     for_each_process(task) {
         if (strcmp(task->parent->comm, "containerd-shim") == 0 || strcmp(task->parent->comm, "dockerd") == 0) {
-            int porcentaje_memoria = calcularPorcentajeRAM(task->pid);
-            if (porcentaje_memoria == -1) {
-                porcentaje_memoria = 0;
-            }
-
             seq_printf(archivo, "    {\n");
             seq_printf(archivo, "      \"pid\": %d,\n", task->pid);
             seq_printf(archivo, "      \"name\": \"%s\",\n", task->comm);
             seq_printf(archivo, "      \"user\": %d,\n", task->cred->uid.val);
-            seq_printf(archivo, "      \"father\": %d,\n", task->parent->pid);
-            seq_printf(archivo, "      \"memory_percentage\": %d\n", porcentaje_memoria);
+            seq_printf(archivo, "      \"father\": %d\n", task->parent->pid);
             seq_printf(archivo, "    },\n");
         }
     }
