@@ -10,7 +10,7 @@ $(shell mkdir -p $(OUT_DIR))
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 	# Mover los archivos generados a la carpeta de salida
-	mv $(PWD)/*.o $(OUT_DIR)/
+	mv $(PWD)/*.o $(OUT_DIR)/ 
 	mv $(PWD)/*.ko $(OUT_DIR)/
 	mv $(PWD)/*.mod* $(OUT_DIR)/
 	mv $(PWD)/*.order $(OUT_DIR)/
