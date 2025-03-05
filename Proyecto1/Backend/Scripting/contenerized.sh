@@ -26,8 +26,8 @@ function container_random() {
     echo "Creando contenedor con ID: $unique_id tipo de estrés: $case_number"
 
     case $case_number in
-        1)  # CPU Stress (Limitar a 25% de un núcleo)
-            docker run -d --name CPU_stress-$unique_id --cpus="0.35" containerstack/alpine-stress stress --cpu 1 &> /dev/null
+        1)  # CPU Stress (Limitar a 20% de un núcleo)
+            docker run -d --name CPU_stress-$unique_id --cpus="0.20" containerstack/alpine-stress stress --cpu 1 &> /dev/null
             ;;
         2)  # Memory Stress (usar 2 instancias de stress de 256MB c/u, reducir a 0.1 núcleo)
             docker run -d --name Memory_stress-$unique_id --cpus="0.1" containerstack/alpine-stress stress --vm 2 &> /dev/null
@@ -58,6 +58,6 @@ for i in {1..10}; do
         fi
 
     else
-        container_random 1
+        container_random 0
     fi
 done
