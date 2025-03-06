@@ -335,11 +335,11 @@ static int write_file(struct seq_file *archivo, void *v)
     get_memory_usage_general(&total_mem, &free_mem, &used_mem);
 
     seq_printf(archivo, "{\n");
-    seq_printf(archivo, "\t\"CPU_general\": %d,\n", cpu_general_use);
-    seq_printf(archivo, "\t\"RAM_memory\": {\n");
-    seq_printf(archivo, "\t\t\"Total\": %lu,\n", total_mem);
-    seq_printf(archivo, "\t\t\"Free\": %lu,\n", free_mem);
-    seq_printf(archivo, "\t\t\"Used\": %lu\n", used_mem);
+    seq_printf(archivo, "\t\"cpu_general\": %d,\n", cpu_general_use);
+    seq_printf(archivo, "\t\"ram_memory\": {\n");
+    seq_printf(archivo, "\t\t\"total\": %lu,\n", total_mem);
+    seq_printf(archivo, "\t\t\"free\": %lu,\n", free_mem);
+    seq_printf(archivo, "\t\t\"used\": %lu\n", used_mem);
     seq_printf(archivo, "\t},\n");
 
     // Reservar memoria para almacenar la información de los contenedores
@@ -352,7 +352,9 @@ static int write_file(struct seq_file *archivo, void *v)
         return -ENOMEM;
     }
 
-    seq_printf(archivo, "\t\"Containers\": [\n");
+    seq_printf(archivo, "\t\"containers\": [\n");
+
+    int first_container = 1; // Variable para controlar el primer contenedor
 
     for_each_process(task)
     {
@@ -406,22 +408,28 @@ static int write_file(struct seq_file *archivo, void *v)
                 }
 
                 // Escribir información del contenedor en formato JSON
+                if (!first_container)
+                {
+                    seq_printf(archivo, ",\n"); // Coloca una coma antes del contenedor si no es el primero
+                }
+                first_container = 0; // Ya no es el primer contenedor
+
                 seq_printf(archivo, "\t\t{\n");
-                seq_printf(archivo, "\t\t\t\"Name\": \"%s\",\n", container->name);
-                seq_printf(archivo, "\t\t\t\"PID\": \"%d\",\n", container->pid);
-                seq_printf(archivo, "\t\t\t\"Command\": \"%s\",\n", container->command);
-                seq_printf(archivo, "\t\t\t\"CPU_use\": \"%s\",\n", container->cpu_use);
-                seq_printf(archivo, "\t\t\t\"RAM_use\": \"%s\",\n", container->memory_use);
-                seq_printf(archivo, "\t\t\t\"IO_use\": \"%s\",\n", container->io_use);
-                seq_printf(archivo, "\t\t\t\"Disk_use\": \"%s\"\n", container->disk_use);
-                seq_printf(archivo, "\t\t}%s\n", (container_count < MAX_CONTAINERS - 1) ? "," : "");
+                seq_printf(archivo, "\t\t\t\"name\": \"%s\",\n", container->name);
+                seq_printf(archivo, "\t\t\t\"pid\": \"%d\",\n", container->pid);
+                seq_printf(archivo, "\t\t\t\"command\": \"%s\",\n", container->command);
+                seq_printf(archivo, "\t\t\t\"cpu_use\": \"%s\",\n", container->cpu_use);
+                seq_printf(archivo, "\t\t\t\"ram_use\": \"%s\",\n", container->memory_use);
+                seq_printf(archivo, "\t\t\t\"io_use\": \"%s\",\n", container->io_use);
+                seq_printf(archivo, "\t\t\t\"disk_use\": \"%s\"\n", container->disk_use);
+                seq_printf(archivo, "\t\t}");
 
                 container_count++;
             }
         }
     }
 
-    seq_printf(archivo, "\t]\n");
+    seq_printf(archivo, "\n\t]\n");
     seq_printf(archivo, "}\n");
 
     // Liberar memoria asignada

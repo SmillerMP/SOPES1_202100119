@@ -1,0 +1,13 @@
+# archivos de compilación
+debug/
+target/
+
+# archivos de respaldo
+**/*.rs.bk
+
+# archivos de configuración
+*.pdb
+
+
+# archivos generados por rust
+sysinfo_202100119.json
