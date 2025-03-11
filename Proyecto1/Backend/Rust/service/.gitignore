@@ -10,4 +10,4 @@ target/
 
 
 # archivos generados por rust
-sysinfo_202100119.json
+stopped_containers.json

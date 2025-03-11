@@ -134,6 +134,21 @@ fn get_container_command(container_id: &str) -> String {
     }
 }
 
+fn execute_script(script_path: &str) {
+    loop {
+        let output = Command::new("sh")  // Ejecuta un script Bash
+            .arg(script_path)            // Ruta al script
+            .output()                     // Captura la salida
+            .expect("Failed to execute script");
+
+        println!("✅ Script ejecutado cada 30 segundos: {}\n", script_path);
+        println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
+        println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
+
+        thread::sleep(Duration::from_secs(40)); // Se ejecuta cada 40 segundos
+    }
+}
+
 fn monitor_containers() {
     let file_proc_path = "/proc/sysinfo_202100119";
     let logs = Arc::new(Mutex::new(())); // Inicializar Mutex para el JSON
@@ -202,10 +217,39 @@ fn monitor_containers() {
 
         println!("🔄 Limpiando registros para la siguiente iteración...\n");
 
-        thread::sleep(Duration::from_secs(20));
+        thread::sleep(Duration::from_secs(25));
     }
 }
 
+fn run_docker_compose() {
+    let output = Command::new("docker-compose")
+        .arg("up")
+        .arg("-d") // Ejecuta en modo "detached"
+        .output()
+        .expect("Failed to execute docker-compose");
+
+    println!("✅ Docker Compose ejecutado:");
+    println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
+    println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
+}
+
 fn main() {
-    monitor_containers();
+    // Ejecutar docker-compose para levantar los contenedores de grafana y la api
+    run_docker_compose();
+
+    let script_path = "../../Scripting/contenerized.sh"; 
+
+    // Lanzar hilo para ejecutar el script cada 20 segundos
+    let script_thread = thread::spawn(move || {
+        execute_script(script_path);
+    });
+
+    // Lanzar hilo para monitorear contenedores cada 30 segundos
+    let monitor_thread = thread::spawn(|| {
+        monitor_containers();
+    });
+
+    // Esperar a que ambos hilos terminen (nunca lo harán porque están en bucles infinitos)
+    script_thread.join().unwrap();
+    monitor_thread.join().unwrap();
 }

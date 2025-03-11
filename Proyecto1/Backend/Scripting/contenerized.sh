@@ -23,7 +23,7 @@ function container_random() {
     fi
 
     unique_id=$(date +%s%N)
-    echo "Creando contenedor con ID: $unique_id tipo de estrés: $case_number"
+    # echo "Creando contenedor con ID: $unique_id tipo de estrés: $case_number"
 
     case $case_number in
         1)  # CPU Stress (Limitar a 20% de un núcleo)
