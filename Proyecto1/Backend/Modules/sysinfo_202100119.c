@@ -25,10 +25,10 @@ struct containers_struct_info
     char name[128];
     char command[128];
     int pid;
-    char memory_use[32];
-    char cpu_use[32];
-    char io_use[32];
-    char disk_use[32];
+    unsigned long long cpu_use;
+    unsigned long memory_use;
+    unsigned long long io_use;
+    unsigned long long disk_use;
 };
 
 static struct delayed_work cpu_work;
@@ -384,15 +384,10 @@ static int write_file(struct seq_file *archivo, void *v)
 
                 // Obtener estadísticas
                 char *command = get_command_from_pid(task->pid);
-                unsigned long long cpu_use = get_cpu_usage(id_container);
-                unsigned long memory_use = get_memory_usage(id_container);
-                unsigned long long io_use = get_io_usage(id_container);
-                unsigned long long disk_use = get_disk_usage(id_container);
-
-                snprintf(container->cpu_use, sizeof(container->cpu_use), "%llu%%", cpu_use);
-                snprintf(container->memory_use, sizeof(container->memory_use), "%lu MiB", memory_use);
-                snprintf(container->io_use, sizeof(container->io_use), "%llu IOPS", io_use);
-                snprintf(container->disk_use, sizeof(container->disk_use), "%llu MiB", disk_use);
+                container->cpu_use = get_cpu_usage(id_container);
+                container->memory_use = get_memory_usage(id_container);
+                container->io_use = get_io_usage(id_container);
+                container->disk_use = get_disk_usage(id_container);
 
                 // Copiar el comando
                 if (command)
@@ -415,13 +410,14 @@ static int write_file(struct seq_file *archivo, void *v)
                 first_container = 0; // Ya no es el primer contenedor
 
                 seq_printf(archivo, "\t\t{\n");
-                seq_printf(archivo, "\t\t\t\"name\": \"%s\",\n", container->name);
-                seq_printf(archivo, "\t\t\t\"pid\": \"%d\",\n", container->pid);
+                // seq_printf(archivo, "\t\t\t\"name\": \"%s\",\n", container->name);
+                seq_printf(archivo, "\t\t\t\"id\": \"%s\",\n", container->id);
+                seq_printf(archivo, "\t\t\t\"pid\": %d,\n", container->pid);
                 seq_printf(archivo, "\t\t\t\"command\": \"%s\",\n", container->command);
-                seq_printf(archivo, "\t\t\t\"cpu_use\": \"%s\",\n", container->cpu_use);
-                seq_printf(archivo, "\t\t\t\"ram_use\": \"%s\",\n", container->memory_use);
-                seq_printf(archivo, "\t\t\t\"io_use\": \"%s\",\n", container->io_use);
-                seq_printf(archivo, "\t\t\t\"disk_use\": \"%s\"\n", container->disk_use);
+                seq_printf(archivo, "\t\t\t\"cpu_use\": %llu,\n", container->cpu_use);
+                seq_printf(archivo, "\t\t\t\"ram_use\": %lu,\n", container->memory_use);
+                seq_printf(archivo, "\t\t\t\"io_use\": %llu,\n", container->io_use);
+                seq_printf(archivo, "\t\t\t\"disk_use\": %llu\n", container->disk_use);
                 seq_printf(archivo, "\t\t}");
 
                 container_count++;

@@ -1,6 +1,7 @@
 use serde::Deserialize;
 use serde_json;
 use std::fs;
+use std::process::Command;
 
 #[derive(Deserialize)]
 struct RamMemory {
@@ -11,13 +12,13 @@ struct RamMemory {
 
 #[derive(Deserialize)]
 struct ContainersInfo {
-    name: String,
-    pid: String,
+    id: String,
+    pid: u32,
     command: String,
-    cpu_use: String,
-    ram_use: String,
-    io_use: String,
-    disk_use: String
+    cpu_use: u32,
+    ram_use: u32,
+    io_use: u64,
+    disk_use: u64
 }
 
 #[derive(Deserialize)]
@@ -27,11 +28,33 @@ struct SystemInfo {
     containers: Vec<ContainersInfo>,
 }
 
-fn kill_container(pid: u32) {
-    // Implementar
+fn stop_container(container_id: &str) {
+    let output = Command::new("docker")
+        .arg("stop")
+        .arg(container_id)
+        .output()
+        .expect("failed to execute docker stop");
+
+    println!("status: {}", output.status);
+    println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
+    println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
 }
 
+fn get_container_name(container_id: &str) -> Result<String, Box<dyn std::error::Error>> {
+    let output = Command::new("docker")
+        .arg("inspect")
+        .arg("--format={{join .Config.Cmd \" \"}}")
+        .arg(container_id)
+        .output()
+        .expect("failed to execute docker inspect");
 
+    if output.status.success() {
+        let name = String::from_utf8_lossy(&output.stdout);
+        Ok(name.trim().to_string())
+    } else {
+        Err(format!("Failed to get container name: {}", String::from_utf8_lossy(&output.stderr)).into())
+    }
+}
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let file_proc_path = "/proc/sysinfo_202100119";
@@ -53,16 +76,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         println!("\n\nContainers:");
         for container in &system_info.containers {
-            println!("Name: {}", container.name);
+            println!("ID: {}", container.id);
             println!("PID: {}", container.pid);
             println!("Command: {}", container.command);
             println!("CPU usage: {}", container.cpu_use);
             println!("RAM usage: {}", container.ram_use);
             println!("I/O usage: {}", container.io_use);
             println!("Disk usage: {}", container.disk_use);
+            match get_container_name(&container.id) {
+                Ok(name) => println!("Name: {}", name),
+                Err(e) => println!("Error getting name: {}", e),
+            }
             println!("----------------------------");
         }
     }
 
     Ok(())
 }
+
+
