@@ -1,0 +1,9 @@
+apiVersion: 1
+datasources:
+  - name: sopes-data
+    type: "yesoreyeram-infinity-datasource"  # UID del plugin instalado
+    access: "proxy"
+    url: "http://fastapi_app:8000/json_file"  # URL del backend de datos
+    isDefault: true
+    jsonData:
+      authType: "none"  # Configuración sin autenticación (ajusta si es necesario)
