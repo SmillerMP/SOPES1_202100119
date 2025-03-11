@@ -44,7 +44,7 @@ function container_random() {
 
 for i in {1..10}; do
     #  Se asegura que se cree un contenedor de cada tipo de estrés
-    if [[ $i -ge 8 && $i -le 10 ]]; then
+    if [[ $i -ge 7 && $i -le 10 ]]; then
         if [ $(docker ps --filter "name=CPU_stress" -q | wc -l) -eq 0 ]; then
             container_random 1
         elif [ $(docker ps --filter "name=Memory_stress" -q | wc -l) -eq 0 ]; then
