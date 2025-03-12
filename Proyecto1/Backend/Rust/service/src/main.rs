@@ -8,6 +8,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use chrono::Utc;
+use std::env;
 
 #[derive(Deserialize)]
 #[allow(dead_code)]
@@ -141,7 +142,7 @@ fn execute_script(script_path: &str) {
             .output()                     // Captura la salida
             .expect("Failed to execute script");
 
-        println!("✅ Script ejecutado cada 30 segundos: {}\n", script_path);
+        println!("✅ Script ejecutado cada 40 segundos: {}\n", script_path);
         println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
         println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
 
@@ -237,11 +238,21 @@ fn main() {
     // Ejecutar docker-compose para levantar los contenedores de grafana y la api
     run_docker_compose();
 
-    let script_path = "../../Scripting/contenerized.sh"; 
+    
+    let args: Vec<String> = env::args().collect();
+    let mut ruta = String::new(); // Usamos `mut` para poder modificarla
+
+    // Comprobar si se pasó algún argumento
+    if args.len() > 1 {
+        let ruta_arg = args[1].clone();  // Clonamos el primer argumento
+        ruta = ruta_arg;  // Asignamos la ruta clonada a la variable mutable
+        println!("📁 La ruta del script es: {}", ruta);
+    }
+
 
     // Lanzar hilo para ejecutar el script cada 20 segundos
     let script_thread = thread::spawn(move || {
-        execute_script(script_path);
+        execute_script(&ruta);
     });
 
     // Lanzar hilo para monitorear contenedores cada 30 segundos

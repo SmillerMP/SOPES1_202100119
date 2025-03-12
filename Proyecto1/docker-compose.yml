@@ -7,7 +7,7 @@ services:
     networks:
       - backend
     volumes:
-      - ./Backend/Rust/service/stopped_containers.json:/app/stopped_containers.json:ro
+      - ./stopped_containers.json:/app/stopped_containers.json:ro
     depends_on:
       - grafana
 
