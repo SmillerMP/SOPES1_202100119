@@ -1,0 +1,21 @@
+services:
+  # Servicios de LOCUST
+  master:
+    image: locustio/locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./Backend/Locust/locustfile.py:/mnt/locust/locustfile.py  
+    working_dir: /mnt/locust  # El directorio de trabajo es /mnt/locust
+    command: -f /mnt/locust/locustfile.py --users 10 --master -H http://localhost:8000
+  
+  worker:
+    image: locustio/locust
+    volumes:
+      - ./Backend/Locust/data:/mnt/locust/data  
+      - ./Backend/Locust/locustfile.py:/mnt/locust/locustfile.py 
+    working_dir: /mnt/locust  
+    command: -f /mnt/locust/locustfile.py --worker --master-host master
+
+
+  
