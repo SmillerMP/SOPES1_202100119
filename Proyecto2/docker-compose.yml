@@ -29,6 +29,14 @@ services:
       - "8000:8000"
     networks:
       - kuber-net
+
+  # API_golang
+  api_golang:
+    build: ./Backend/Golang/API
+    ports:
+      - "8010:8010"
+    networks:
+      - kuber-net
     
 networks:
   kuber-net:

@@ -2,6 +2,7 @@ use actix_web::{middleware::Logger, web, App, HttpServer, Responder, HttpRespons
 use serde::{Deserialize, Serialize};
 use dotenv::dotenv;
 use env_logger;
+use reqwest;
 
 // Estructura del JSON
 #[derive(Deserialize, Serialize)]
@@ -17,6 +18,12 @@ struct Greeting {
     message: String
 }
 
+// Estructura de la respuesta a enviar al cliente
+#[derive(Deserialize, Serialize)]
+struct Response {
+    message: String
+}
+
 // El endpoint GET  /
 async fn hello() -> impl Responder {
     let greeting = Greeting {
@@ -28,13 +35,39 @@ async fn hello() -> impl Responder {
 
 // Endpoint POST para recibir un arreglo de objetos JSON
 async fn receive_weather(data: web::Json<Vec<WeatherInfo>>) -> impl Responder {
-    // for weather_info in data.iter() {
-    //     println!("Country: {}, Weather: {}, Description: {}", 
-    //         weather_info.country, 
-    //         weather_info.weather, 
-    //         weather_info.description);
-    // }
-    HttpResponse::Ok().json(data.into_inner()) 
+   
+    // hacer peticion a la otra api
+    let client = reqwest::Client::new();
+    let url = "http://api_golang:8010/weather";
+
+    // Enviar el arreglo de objetos JSON
+    let response = client
+        .post(url)
+        .json(&*data) // Enviar el arreglo de objetos JSON
+        .send()
+        .await;
+
+    match response {
+        Ok(res) => {
+            // Si la petición fue exitosa
+            if res.status().is_success() {
+                HttpResponse::Ok().json(Response {
+                    message: "OK API Rust".to_string(),
+                })
+            } else {
+                // Si hubo un error con la API externa
+                HttpResponse::InternalServerError().json(Response {
+                    message: "Error en la API de Golang".to_string(),
+                })
+            }
+        },
+        Err(_) => {
+            // Si hubo un error al realizar la petición
+            HttpResponse::InternalServerError().json(Response {
+                message: "Error realizando la petición".to_string(),
+            })
+        }
+    }
 }
 
 #[actix_web::main]
@@ -44,7 +77,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .wrap(Logger::default())
+            .wrap(Logger::default()) // Middleware de logging
             .route("/", web::get().to(hello)) // Ruta GET
             .route("/weather", web::post().to(receive_weather)) // Ruta POST
     })

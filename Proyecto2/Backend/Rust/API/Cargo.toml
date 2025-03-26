@@ -3,9 +3,15 @@ name = "API"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "API"
+path = "src/main.rs"  # Especifica el archivo principal de la aplicación
+
 [dependencies]
 actix-web = "4.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 dotenv = "0.15.0"
 env_logger = "0.11.3"
+reqwest = { version = "0.11", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
