@@ -32,9 +32,24 @@ services:
 
   # API_golang
   api_golang:
-    build: ./Backend/Golang/API-gRPC
+    build: ./Backend/Golang/API_gRPC
+    environment:
+      - API_PORT=8010
+      - GRPC_SERVER=gRPC_kafka:50051
     ports:
       - "8010:8010"
+    networks:
+      - kuber-net
+
+  
+  grpc_kafka:
+    build: ./Backend/Golang/gRPC_Servers/Kafka
+    environment:
+      # - KAFKA_BROKER=kafka:9092
+      # - KAFKA_TOPIC=messages
+      - GRPC_PORT=50051
+    ports:
+      - "50051:50051"
     networks:
       - kuber-net
     

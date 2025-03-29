@@ -1,8 +1,10 @@
 package main
 
 import (
-	"API-gRPC/protofiles/weatherpb"
+	"API_gRPC/protofiles/weatherpb"
 	"context"
+	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -11,6 +13,18 @@ import (
 )
 
 func main() {
+	// Leer el puerto de la API desde el archivo .env
+	apiPort := os.Getenv("API_PORT")
+	if apiPort == "" {
+		log.Fatalf("La variable de entorno API_PORT no está definida")
+	}
+
+	// Leer la dirección del servidor gRPC desde el archivo .env
+	grpcServer := os.Getenv("GRPC_SERVER")
+	if grpcServer == "" {
+		log.Fatalf("La variable de entorno GRPC_SERVER no está definida")
+	}
+
 	app := fiber.New()
 
 	app.Use(cors.New())
@@ -23,7 +37,6 @@ func main() {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"message": "Hello, World!",
 		})
-
 	})
 
 	app.Post("/weather", func(c *fiber.Ctx) error {
@@ -42,7 +55,7 @@ func main() {
 		}
 
 		// conectar al servidor gRPC
-		conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+		conn, err := grpc.Dial(grpcServer, grpc.WithInsecure())
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"error": "Error connecting to gRPC server",
@@ -81,5 +94,7 @@ func main() {
 		})
 	})
 
-	app.Listen("0.0.0.0:8010")
+	// Escuchar en el puerto especificado
+	log.Printf("API escuchando en el puerto %s...\n", apiPort)
+	app.Listen("0.0.0.0:" + apiPort)
 }

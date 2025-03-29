@@ -1,4 +1,4 @@
-module API-gRPC
+module API_gRPC
 
 // Go version
 
