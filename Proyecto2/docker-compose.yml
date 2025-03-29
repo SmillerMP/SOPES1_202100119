@@ -35,13 +35,15 @@ services:
     build: ./Backend/Golang/API_gRPC
     environment:
       - API_PORT=8010
-      - GRPC_SERVER=gRPC_kafka:50051
+      - GRPC_SERVER_KAFKA=gRPC_kafka:50051
+      - GRPC_SERVER_RABBITMQ=gRPC_rabbitmq:50052
     ports:
       - "8010:8010"
     networks:
       - kuber-net
 
   
+  # server gRPC kafka
   grpc_kafka:
     build: ./Backend/Golang/gRPC_Servers/Kafka
     environment:
@@ -52,6 +54,20 @@ services:
       - "50051:50051"
     networks:
       - kuber-net
+
+
+  # server gRPC rabbitmq
+  grpc_rabbitmq:
+    build: ./Backend/Golang/gRPC_Servers/RabbitMQ
+    environment:
+      # - RABBITMQ_HOST=rabbitmq
+      # - RABBITMQ_QUEUE=messages
+      - GRPC_PORT=50052
+    ports:
+      - "50052:50052"
+    networks:
+      - kuber-net
+    
     
 networks:
   kuber-net:

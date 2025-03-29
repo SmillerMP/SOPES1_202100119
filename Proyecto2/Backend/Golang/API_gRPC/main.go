@@ -19,12 +19,6 @@ func main() {
 		log.Fatalf("La variable de entorno API_PORT no está definida")
 	}
 
-	// Leer la dirección del servidor gRPC desde el archivo .env
-	grpcServer := os.Getenv("GRPC_SERVER")
-	if grpcServer == "" {
-		log.Fatalf("La variable de entorno GRPC_SERVER no está definida")
-	}
-
 	app := fiber.New()
 
 	app.Use(cors.New())
@@ -40,13 +34,21 @@ func main() {
 	})
 
 	app.Post("/weather", func(c *fiber.Ctx) error {
-		// retornar mensaje de bienvenida json
 		type Request struct {
-			Country     string `json:"country"` // path del disco
-			Weather     string `json:"weather"` // ruta de la carpeta
+			Country     string `json:"country"`
+			Weather     string `json:"weather"`
 			Description string `json:"description"`
 		}
 
+		// Leer las direcciones de los servidores gRPC desde las variables de entorno
+		grpcServerKafka := os.Getenv("GRPC_SERVER_KAFKA")
+		grpcServerRabbit := os.Getenv("GRPC_SERVER_RABBITMQ")
+
+		if grpcServerKafka == "" || grpcServerRabbit == "" {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Las variables de entorno GRPC_SERVER_KAFKA o GRPC_SERVER_RABBITMQ no están definidas",
+			})
+		}
 		var req []Request
 		if err := c.BodyParser(&req); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -54,19 +56,7 @@ func main() {
 			})
 		}
 
-		// conectar al servidor gRPC
-		conn, err := grpc.Dial(grpcServer, grpc.WithInsecure())
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": "Error connecting to gRPC server",
-			})
-		}
-		defer conn.Close()
-
-		// crear cliente gRPC
-		client := weatherpb.NewWeatherServiceClient(conn)
-
-		// convertir los datos a un objeto Weather
+		// Crear la lista de datos a enviar
 		var weatherList []*weatherpb.WeatherRequest
 		for _, data := range req {
 			weatherList = append(weatherList, &weatherpb.WeatherRequest{
@@ -76,21 +66,55 @@ func main() {
 			})
 		}
 
-		// Enviar la solicitud al servidor gRPC
-		response, err := client.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
-			Weather: weatherList, // Asegúrate de usar el campo correcto definido en el .proto
+		// Conectar al primer servidor gRPC
+		connKafka, err := grpc.Dial(grpcServerKafka, grpc.WithInsecure())
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Error connecting to gRPC server Kafka",
+			})
+		}
+		defer connKafka.Close()
+
+		client1 := weatherpb.NewWeatherServiceClient(connKafka)
+
+		// Enviar los datos al primer servidor
+		responseKafka, err := client1.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
+			Weather: weatherList,
 		})
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error":   "Error al enviar datos al servidor gRPC",
+				"error":   "Error al enviar datos al servidor gRPC Kafka",
 				"details": err.Error(),
 			})
 		}
 
-		// Manejar la respuesta del servidor gRPC
+		// Conectar al segundo servidor gRPC
+		connRabbit, err := grpc.Dial(grpcServerRabbit, grpc.WithInsecure())
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Error connecting to gRPC server RabbitMQ",
+			})
+		}
+		defer connRabbit.Close()
+
+		client2 := weatherpb.NewWeatherServiceClient(connRabbit)
+
+		// Enviar los datos al segundo servidor
+		responseRabbit, err := client2.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
+			Weather: weatherList,
+		})
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error":   "Error al enviar datos al servidor gRPC RabbitMQ",
+				"details": err.Error(),
+			})
+		}
+
+		// Manejar las respuestas de ambos servidores
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"message": "OK API Golang",
-			"status":  response.Status, // Incluye el estado de la respuesta del servidor
+			"message": "Datos enviados a ambos servidores gRPC",
+			"status1": responseKafka.Status,
+			"status2": responseRabbit.Status,
 		})
 	})
 

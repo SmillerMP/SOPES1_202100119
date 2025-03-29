@@ -1,0 +1,23 @@
+
+syntax = "proto3";
+
+package protofiles;
+option go_package = "protofiles/weatherpb";
+
+service WeatherService {
+  rpc sendWeatherData (WeatherListRequest) returns (WeatherResponse);
+}
+
+message WeatherRequest {
+  string country = 1;       // nombre del país
+  string weather = 2;       // datos del clima
+  string description = 3;   // descripción del clima
+}
+
+message WeatherListRequest {
+  repeated WeatherRequest weather = 1; // lista de datos del clima
+}
+
+message WeatherResponse {
+  string status = 1; // estado de la respuesta
+}
