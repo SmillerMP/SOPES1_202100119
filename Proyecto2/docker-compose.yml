@@ -32,7 +32,7 @@ services:
 
   # API_golang
   api_golang:
-    build: ./Backend/Golang/API
+    build: ./Backend/Golang/API-gRPC
     ports:
       - "8010:8010"
     networks:
