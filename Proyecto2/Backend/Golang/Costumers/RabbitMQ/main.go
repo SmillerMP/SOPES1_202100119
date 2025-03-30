@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 	"sync"
 
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -26,6 +27,18 @@ func main() {
 	rabbitmq := os.Getenv("RABBITMQ_SERVER")
 	if rabbitmq == "" {
 		log.Fatalf("La variable de entorno RABBITMQ_SERVER no está definida")
+	}
+
+	// Leer la variable de entorno para el número de goroutines
+	goRutines := os.Getenv("NO_GOROUTINES")
+	if goRutines == "" {
+		log.Fatalf("La variable de entorno NO_GOROUTINES no está definida")
+	}
+
+	// Convertir el valor de la variable de entorno a int
+	numGoRutines, err := strconv.Atoi(goRutines)
+	if err != nil {
+		log.Fatalf("Error al convertir la variable de entorno NO_GOROUTINES a int: %v", err)
 	}
 
 	// Conectar a RabbitMQ
@@ -63,14 +76,11 @@ func main() {
 	// Crear un grupo de espera para sincronizar las goroutines
 	var wg sync.WaitGroup
 
-	// Número de workers (goroutines) para procesar mensajes
-	numWorkers := 10
-
 	// Canal para enviar mensajes a los workers
 	messageChannel := make(chan []byte)
 
 	// Crear workers
-	for i := 0; i < numWorkers; i++ {
+	for i := 0; i < numGoRutines; i++ {
 		wg.Add(1)
 		go func(workerID int) {
 			defer wg.Done()

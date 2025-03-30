@@ -7,19 +7,18 @@ services:
     ports:
       - "8089:8089"
     volumes:
-      - ./Backend/Locust/locustfile.py:/mnt/locust/locustfile.py  
-    working_dir: /mnt/locust  # El directorio de trabajo es /mnt/locust
+      - ./Backend/Locust/locustfile.py:/mnt/locust/locustfile.py
+    working_dir: /mnt/locust # El directorio de trabajo es /mnt/locust
     command: -f /mnt/locust/locustfile.py --users 10 --master -H http://api_rust:8000
 
-  
   worker:
     image: locustio/locust
     networks:
       - kuber-net
     volumes:
-      - ./Backend/Locust/data:/mnt/locust/data  
-      - ./Backend/Locust/locustfile.py:/mnt/locust/locustfile.py 
-    working_dir: /mnt/locust  
+      - ./Backend/Locust/data:/mnt/locust/data
+      - ./Backend/Locust/locustfile.py:/mnt/locust/locustfile.py
+    working_dir: /mnt/locust
     command: -f /mnt/locust/locustfile.py --worker --master-host master
 
   # API_rust
@@ -42,7 +41,6 @@ services:
     networks:
       - kuber-net
 
-  
   # server gRPC kafka
   # grpc_kafka:
   #   build: ./Backend/Golang/gRPC_Servers/Kafka
@@ -59,17 +57,16 @@ services:
   rabbitmq:
     image: rabbitmq:4.0-management
     ports:
-      - "15672:15672"  # Puerto para la interfaz de administración
-      - "5672:5672"    # Puerto para el protocolo AMQP
+      - "15672:15672" # Puerto para la interfaz de administración
+      - "5672:5672" # Puerto para el protocolo AMQP
     networks:
       - kuber-net
     healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
+      test: [ "CMD", "rabbitmqctl", "status" ]
       interval: 15s
       retries: 3
       start_period: 30s
-  
-    
+
   # server gRPC rabbitmq
   grpc_rabbitmq:
     build: ./Backend/Golang/gRPC_Servers/RabbitMQ
@@ -85,23 +82,29 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-  
 
   costumer_rabbitmq:
     build: ./Backend/Golang/Costumers/RabbitMQ
     environment:
       - RABBITMQ_SERVER=rabbitmq:5672
+      - NO_GOROUTINES=10
       # - RABBITMQ_QUEUE=messages
     networks:
       - kuber-net
     depends_on:
       rabbitmq:
         condition: service_healthy
-      
-  
-  
-    
+    # valkey
+  valkey:
+    image: bitnami/valkey:8.0
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      # - VALKEY_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    networks:
+      - kuber-net
+    ports:
+      - '6379:6379'
+
 networks:
   kuber-net:
     driver: bridge
-  
