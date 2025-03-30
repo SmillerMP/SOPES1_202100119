@@ -37,25 +37,39 @@ services:
       - API_PORT=8010
       - GRPC_SERVER_KAFKA=gRPC_kafka:50051
       - GRPC_SERVER_RABBITMQ=gRPC_rabbitmq:50052
-    ports:
-      - "8010:8010"
+    # ports:
+    #   - "8010:8010"
     networks:
       - kuber-net
 
   
   # server gRPC kafka
-  grpc_kafka:
-    build: ./Backend/Golang/gRPC_Servers/Kafka
-    environment:
-      # - KAFKA_BROKER=kafka:9092
-      # - KAFKA_TOPIC=messages
-      - GRPC_PORT=50051
+  # grpc_kafka:
+  #   build: ./Backend/Golang/gRPC_Servers/Kafka
+  #   environment:
+  #     # - KAFKA_BROKER=kafka:9092
+  #     # - KAFKA_TOPIC=messages
+  #     - GRPC_PORT=50051
+  #   # ports:
+  #   #   - "50051:50051"
+  #   networks:
+  #     - kuber-net
+
+
+  rabbitmq:
+    image: rabbitmq:4.0-management
     ports:
-      - "50051:50051"
+      - "15672:15672"  # Puerto para la interfaz de administración
+      - "5672:5672"    # Puerto para el protocolo AMQP
     networks:
       - kuber-net
-
-
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 15s
+      retries: 3
+      start_period: 30s
+  
+    
   # server gRPC rabbitmq
   grpc_rabbitmq:
     build: ./Backend/Golang/gRPC_Servers/RabbitMQ
@@ -63,11 +77,29 @@ services:
       # - RABBITMQ_HOST=rabbitmq
       # - RABBITMQ_QUEUE=messages
       - GRPC_PORT=50052
-    ports:
-      - "50052:50052"
+      - RABBITMQ_SERVER=rabbitmq:5672
+    # ports:
+    #   - "50052:50052"
     networks:
       - kuber-net
-    
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+  
+
+  costumer_rabbitmq:
+    build: ./Backend/Golang/Costumers/RabbitMQ
+    environment:
+      - RABBITMQ_SERVER=rabbitmq:5672
+      # - RABBITMQ_QUEUE=messages
+    networks:
+      - kuber-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      
+  
+  
     
 networks:
   kuber-net:
