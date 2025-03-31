@@ -1,12 +1,15 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 
 	amqp "github.com/rabbitmq/amqp091-go"
+	"github.com/valkey-io/valkey-go"
 )
 
 func failOnError(err error, msg string) {
@@ -16,10 +19,35 @@ func failOnError(err error, msg string) {
 }
 
 // Función para procesar un mensaje
-func processMessage(body []byte) {
+func processMessage(body []byte, clientValkey valkey.Client) {
 	log.Printf("Procesando mensaje: %s", body)
-	// Simular procesamiento (puedes reemplazar esto con lógica real)
-	// time.Sleep(1 * time.Second)
+
+	message := string(body)
+
+	var country string
+	parts := strings.Split(message, ",")
+	for _, part := range parts {
+		if strings.Contains(part, "country:") {
+			country = strings.Split(part, ":")[1]
+			country = strings.TrimSpace(country)
+			break
+		}
+	}
+
+	if country == "" {
+		log.Println("No se encontró el país en el mensaje")
+		return
+	}
+
+	ctx := context.Background()
+
+	// Incrementar el contador de la variable country en Valkey
+	err := clientValkey.Do(ctx, clientValkey.B().Hincrby().Key("contador:paises").Field(country).Increment(1).Build()).Error()
+	if err != nil {
+		log.Printf("Error al incrementar el contador para el país %s: %v", country, err)
+		return
+	}
+
 }
 
 func main() {
@@ -40,6 +68,14 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error al convertir la variable de entorno NO_GOROUTINES a int: %v", err)
 	}
+
+	// configurar valkey
+	clientValkey, err := valkey.NewClient(valkey.ClientOption{InitAddress: []string{"valkey:6379"}})
+	if err != nil {
+		log.Fatalf("Error al crear el cliente de valkey: %v", err)
+	}
+	defer clientValkey.Close()
+	log.Printf("Conectando a Valkey en %s", "valkey:6379")
 
 	// Conectar a RabbitMQ
 	conn, err := amqp.Dial("amqp://guest:guest@" + rabbitmq + "/")
@@ -86,7 +122,8 @@ func main() {
 			defer wg.Done()
 			for body := range messageChannel {
 				// log.Printf("Worker %d procesando mensaje", workerID)
-				processMessage(body)
+				processMessage(body, clientValkey)
+
 			}
 		}(i)
 	}
