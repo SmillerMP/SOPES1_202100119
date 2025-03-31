@@ -87,7 +87,8 @@ services:
     build: ./Backend/Golang/Costumers/RabbitMQ
     environment:
       - RABBITMQ_SERVER=rabbitmq:5672
-      - NO_GOROUTINES=10
+      - NO_GOROUTINES=20
+      - VALKEY_SERVER=valkey:6379
       # - RABBITMQ_QUEUE=messages
     networks:
       - kuber-net
@@ -104,6 +105,17 @@ services:
       - kuber-net
     ports:
       - '6379:6379'
+
+  
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Grafana en el puerto 3000
+    networks:
+      - kuber-net
+    
 
 networks:
   kuber-net:

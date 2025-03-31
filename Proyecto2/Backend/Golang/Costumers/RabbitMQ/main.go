@@ -45,9 +45,27 @@ func processMessage(body []byte, clientValkey valkey.Client) {
 	err := clientValkey.Do(ctx, clientValkey.B().Hincrby().Key("contador:paises").Field(country).Increment(1).Build()).Error()
 	if err != nil {
 		log.Printf("Error al incrementar el contador para el país %s: %v", country, err)
-		return
 	}
 
+	err = clientValkey.Do(ctx, clientValkey.B().Incr().Key("total").Build()).Error()
+	if err != nil {
+		log.Printf("Error al incrementar el contador total: %v", err)
+	}
+}
+
+// Función para crear el cliente de RabbitMQ y el canal
+func createRabbitMQConnection(rabbitmq string) (*amqp.Connection, *amqp.Channel, error) {
+	conn, err := amqp.Dial("amqp://guest:guest@" + rabbitmq + "/")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	ch, err := conn.Channel()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return conn, ch, nil
 }
 
 func main() {
@@ -63,6 +81,11 @@ func main() {
 		log.Fatalf("La variable de entorno NO_GOROUTINES no está definida")
 	}
 
+	valkeyServer := os.Getenv("VALKEY_SERVER")
+	if valkeyServer == "" {
+		log.Fatalf("La variable de entorno NO_GOROUTINES no está definida")
+	}
+
 	// Convertir el valor de la variable de entorno a int
 	numGoRutines, err := strconv.Atoi(goRutines)
 	if err != nil {
@@ -70,7 +93,7 @@ func main() {
 	}
 
 	// configurar valkey
-	clientValkey, err := valkey.NewClient(valkey.ClientOption{InitAddress: []string{"valkey:6379"}})
+	clientValkey, err := valkey.NewClient(valkey.ClientOption{InitAddress: []string{valkeyServer}})
 	if err != nil {
 		log.Fatalf("Error al crear el cliente de valkey: %v", err)
 	}
@@ -78,12 +101,9 @@ func main() {
 	log.Printf("Conectando a Valkey en %s", "valkey:6379")
 
 	// Conectar a RabbitMQ
-	conn, err := amqp.Dial("amqp://guest:guest@" + rabbitmq + "/")
+	conn, ch, err := createRabbitMQConnection(rabbitmq)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
-
-	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
 	// Declarar la cola
@@ -123,7 +143,6 @@ func main() {
 			for body := range messageChannel {
 				// log.Printf("Worker %d procesando mensaje", workerID)
 				processMessage(body, clientValkey)
-
 			}
 		}(i)
 	}
