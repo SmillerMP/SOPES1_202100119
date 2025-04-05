@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sopesp2-deployment-rust
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sopesp2
+  template:
+    metadata:
+      labels:
+        app: sopesp2
+    spec:
+      containers:
+        - name: sopesp2-rust
+          image: smillermp/sopesp2-rust:1.0
+          ports:
+            - containerPort: 8000
+          env:
+            - name: API_PORT
+              value: "8000"
+            - name: GOLANG_API_URL
+              value: "http://sopesp2-service-go-grpc:8010/weather" # URL del servicio gRPC de Go
+          resources:
+            requests:
+              memory: "256Mi"  # Memoria mínima solicitada
+              cpu: "500m"       # CPU mínima solicitada
+            limits:
+              memory: "512Mi"   # Memoria máxima permitida
+              cpu: "1"          # CPU máximo permitido

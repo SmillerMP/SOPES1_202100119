@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sopesp2-deployment-grpc-server-rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sopesp2
+  template:
+    metadata:
+      labels:
+        app: sopesp2
+    spec:
+      containers:
+        - name: sopesp2-grpc-server-rabbitmq
+          image: smillermp/sopesp2-grpc-server-rabbit:1.0 
+          ports:
+            - containerPort: 50052
+          env:
+            - name: GRPC_PORT
+              value: "50052"
+            - name: RABBITMQ_SERVER
+              value: sopesp2-service-rabbitmq:5672
+          resources:
+            requests:
+              memory: "256Mi"  # Memoria mínima solicitada
+              cpu: "500m"       # CPU mínima solicitada
+            limits:
+              memory: "512Mi"   # Memoria máxima permitida
+              cpu: "1"          # CPU máximo permitido

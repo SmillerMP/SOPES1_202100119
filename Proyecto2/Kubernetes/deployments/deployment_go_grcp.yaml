@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sopesp2-deployment-go-grpc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sopesp2
+  template:
+    metadata:
+      labels:
+        app: sopesp2
+    spec:
+      containers:
+        - name: sopesp2-go-api-grpc
+          image: smillermp/sopesp2-go-api-grpc:1.0 
+          ports:
+            - containerPort: 8010
+          env:
+            - name: API_PORT
+              value: "8010"
+            - name: GRPC_SERVER_KAFKA
+              value: "gRPC_kafka:50051"
+            - name: GRPC_SERVER_RABBITMQ
+              value: "sopesp2-service-grpc-server-rabbitmq:50052"
+
+          resources:
+            requests:
+              memory: "256Mi"  # Memoria mínima solicitada
+              cpu: "500m"       # CPU mínima solicitada
+            limits:
+              memory: "512Mi"   # Memoria máxima permitida
+              cpu: "1"          # CPU máximo permitido
