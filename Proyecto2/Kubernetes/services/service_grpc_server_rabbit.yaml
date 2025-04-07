@@ -4,7 +4,7 @@ metadata:
   name: sopesp2-service-grpc-server-rabbitmq
 spec:
   selector:
-    app: sopesp2
+    app: sopesp2-grpc-server-rabbitmq
   ports:
     - protocol: TCP
       port: 50052          # El puerto del servicio en el clúster

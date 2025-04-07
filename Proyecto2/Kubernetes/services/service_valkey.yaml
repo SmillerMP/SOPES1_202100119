@@ -10,5 +10,4 @@ spec:
       protocol: TCP
       port: 6379
       targetPort: 6379
-      nodePort: 31010     # exponer el puerto 31010 para el servicio
-  type: NodePort
+  type: LoadBalancer

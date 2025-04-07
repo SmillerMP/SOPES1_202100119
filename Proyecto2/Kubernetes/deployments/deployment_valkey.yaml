@@ -22,3 +22,10 @@ spec:
               value: "yes"
             # - name: VALKEY_DISABLE_COMMANDS
             #   value: "FLUSHDB,FLUSHALL"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"

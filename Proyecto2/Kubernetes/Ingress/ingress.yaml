@@ -4,15 +4,17 @@ metadata:
   name: sopesp2-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: "/"
+
 spec:
+  ingressClassName: nginx
   rules:
     - host: ""
-      http:
+      http: 
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: sopesp2-service
+                name: sopesp2-service-rust
                 port:
                   number: 80

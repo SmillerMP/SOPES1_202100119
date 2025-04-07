@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sopesp2
+      app: sopesp2-service-rust
   template:
     metadata:
       labels:
-        app: sopesp2
+        app: sopesp2-service-rust
     spec:
       containers:
         - name: sopesp2-rust
@@ -24,8 +24,8 @@ spec:
               value: "http://sopesp2-service-go-grpc:8010/weather" # URL del servicio gRPC de Go
           resources:
             requests:
-              memory: "256Mi"  # Memoria mínima solicitada
-              cpu: "500m"       # CPU mínima solicitada
+              memory: "128Mi"
+              cpu: "100m"
             limits:
-              memory: "512Mi"   # Memoria máxima permitida
-              cpu: "1"          # CPU máximo permitido
+              memory: "256Mi"
+              cpu: "250m"

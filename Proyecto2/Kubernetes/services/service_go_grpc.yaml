@@ -4,7 +4,7 @@ metadata:
   name: sopesp2-service-go-grpc
 spec:
   selector:
-    app: sopesp2
+    app: sopesp2-go-grpc
   ports:
     - protocol: TCP
       port: 8010          # El puerto del servicio en el clúster

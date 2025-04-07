@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sopesp2-deployment-go-grpc
+  name: sopesp2-deployment-consumer-rabbitmq
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: sopesp2
+      app: sopesp2-consumer-rabbitmq
   template:
     metadata:
       labels:
-        app: sopesp2
+        app: sopesp2-consumer-rabbitmq
     spec:
       containers:
         - name: sopesp2-consumer-rabbimq
@@ -19,14 +19,13 @@ spec:
             - name: RABBITMQ_SERVER
               value: "sopesp2-service-rabbitmq:5672"
             - name: NO_GOROUTINES
-              value: "20"
+              value: "15"
             - name: VALKEY_SERVER
-              value: "sopesp2-deployment-valkey:6379"
-
+              value: "sopesp2-service-valkey:6379"
           resources:
             requests:
-              memory: "256Mi"  # Memoria mínima solicitada
-              cpu: "500m"       # CPU mínima solicitada
+              memory: "128Mi"
+              cpu: "100m"
             limits:
-              memory: "512Mi"   # Memoria máxima permitida
-              cpu: "1"          # CPU máximo permitido
+              memory: "256Mi"
+              cpu: "250m"

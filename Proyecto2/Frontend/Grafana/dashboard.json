@@ -23,7 +23,7 @@
     "panels": [
       {
         "datasource": {
-          "type": "redis-datasource",
+          "type": "valkey-datasource",
           "uid": "fehgaup2j42dce"
         },
         "fieldConfig": {

@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sopesp2
+      app: sopesp2-grpc-server-rabbitmq
   template:
     metadata:
       labels:
-        app: sopesp2
+        app: sopesp2-grpc-server-rabbitmq
     spec:
       containers:
         - name: sopesp2-grpc-server-rabbitmq
@@ -24,8 +24,8 @@ spec:
               value: sopesp2-service-rabbitmq:5672
           resources:
             requests:
-              memory: "256Mi"  # Memoria mínima solicitada
-              cpu: "500m"       # CPU mínima solicitada
+              memory: "128Mi"
+              cpu: "100m"
             limits:
-              memory: "512Mi"   # Memoria máxima permitida
-              cpu: "1"          # CPU máximo permitido
+              memory: "256Mi"
+              cpu: "250m"

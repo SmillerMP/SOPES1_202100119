@@ -18,3 +18,10 @@ spec:
           ports:
             - containerPort: 5672   # AMQP
             - containerPort: 15672  # Management
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
