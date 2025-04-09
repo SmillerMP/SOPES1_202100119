@@ -18,13 +18,135 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "id": 1,
+    "id": 4,
     "links": [],
     "panels": [
       {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 3,
+        "panels": [],
+        "title": "Graficas",
+        "type": "row"
+      },
+      {
         "datasource": {
           "type": "valkey-datasource",
-          "uid": "fehgaup2j42dce"
+          "uid": "P36C0C6B32A5CDCBE"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": true,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Data",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "displayName": "Mensajes Consumidos",
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Mensajes Consumidos"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 1
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [
+              "last"
+            ],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.5.2",
+        "targets": [
+          {
+            "command": "get",
+            "keyName": "total",
+            "query": "",
+            "refId": "A",
+            "streaming": true,
+            "type": "command"
+          }
+        ],
+        "title": "Rabbit x Valkey Consumer",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "valkey-datasource",
+          "uid": "P36C0C6B32A5CDCBE"
         },
         "fieldConfig": {
           "defaults": {
@@ -66,10 +188,10 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 10,
+          "h": 8,
           "w": 24,
           "x": 0,
-          "y": 0
+          "y": 8
         },
         "id": 1,
         "options": {
@@ -95,7 +217,6 @@
             "mode": "none",
             "sort": "none"
           },
-          "xField": "Pais",
           "xTickLabelRotation": 0,
           "xTickLabelSpacing": 100
         },
@@ -104,22 +225,221 @@
           {
             "command": "hgetall",
             "datasource": {
-              "type": "redis-datasource",
+              "type": "valkey-datasource",
               "uid": "fehgaup2j42dce"
             },
             "field": "",
             "keyName": "contador:paises",
             "query": "",
             "refId": "A",
+            "streaming": true,
+            "streamingDataType": "DataFrame",
             "type": "command"
           }
         ],
         "title": "Data por país",
         "type": "barchart"
+      },
+      {
+        "datasource": {
+          "type": "valkey-datasource",
+          "uid": "P36C0C6B32A5CDCBE"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": null
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 55
+                },
+                {
+                  "color": "dark-green",
+                  "value": 75
+                }
+              ]
+            },
+            "unit": "mps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 0,
+          "y": 16
+        },
+        "id": 4,
+        "options": {
+          "minVizHeight": 0,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "11.5.2",
+        "targets": [
+          {
+            "command": "info",
+            "field": "instantaneous_ops_per_sec",
+            "keyName": "total",
+            "query": "",
+            "refId": "A",
+            "section": "stats",
+            "streaming": true,
+            "streamingDataType": "TimeSeries",
+            "streamingInterval": 0,
+            "type": "command"
+          }
+        ],
+        "title": "Mensajes por Segundo",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "P36C0C6B32A5CDCBE"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "left",
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 0,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 4,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "RAM"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "light-blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "used_memory"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "light-blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 9,
+          "x": 6,
+          "y": 16
+        },
+        "id": 5,
+        "options": {
+          "barRadius": 0.15,
+          "barWidth": 0.76,
+          "fullHighlight": false,
+          "groupWidth": 0.7,
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "orientation": "horizontal",
+          "showValue": "auto",
+          "stacking": "none",
+          "text": {},
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "none",
+            "sort": "none"
+          },
+          "xTickLabelRotation": 0,
+          "xTickLabelSpacing": 0
+        },
+        "pluginVersion": "11.5.2",
+        "targets": [
+          {
+            "command": "info",
+            "field": "used_memory",
+            "hide": false,
+            "query": "",
+            "refId": "A",
+            "section": "memory",
+            "streaming": true,
+            "streamingCapacity": 1,
+            "streamingDataType": "TimeSeries",
+            "streamingInterval": 1000,
+            "type": "command"
+          }
+        ],
+        "title": "Uso de memoria RAM",
+        "type": "barchart"
       }
     ],
     "preload": false,
-    "refresh": "5s",
+    "refresh": "",
     "schemaVersion": 40,
     "tags": [],
     "templating": {
@@ -131,8 +451,8 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "New dashboard",
-    "uid": "behgg597hmr5sb",
-    "version": 5,
+    "title": "Graficas",
+    "uid": "eeic00w0pqdj4f",
+    "version": 13,
     "weekStart": ""
   }

@@ -41,8 +41,13 @@ func processMessage(body []byte, clientValkey valkey.Client) {
 
 	ctx := context.Background()
 
+	err := clientValkey.Do(ctx, clientValkey.B().Hset().Key("contador:paises").FieldValue().FieldValue("Pais", "Valor").Build()).Error()
+	if err != nil {
+		log.Printf("Error al inicializar el hash en Valkey: %v", err)
+	}
+
 	// Incrementar el contador de la variable country en Valkey
-	err := clientValkey.Do(ctx, clientValkey.B().Hincrby().Key("contador:paises").Field(country).Increment(1).Build()).Error()
+	err = clientValkey.Do(ctx, clientValkey.B().Hincrby().Key("contador:paises").Field(country).Increment(1).Build()).Error()
 	if err != nil {
 		log.Printf("Error al incrementar el contador para el país %s: %v", country, err)
 	}

@@ -130,9 +130,9 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=sopes1  # Contraseña
       - GF_INSTALL_PLUGINS=redis-datasource
     volumes:
-      - ./Frontend/Grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml  # Configuración de dashboards
+      # - ./Frontend/Grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml  # Configuración de dashboards
       - ./Frontend/Grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml  # Nuevo archivo de configuración
-      - ./Frontend/Grafana/dashboard.json:/var/lib/grafana/dashboards/dashboard.json  # Dashboard JSON
+      # - ./Frontend/Grafana/dashboard.json:/var/lib/grafana/dashboards/dashboard.json  # Dashboard JSON
     
 
 networks:
