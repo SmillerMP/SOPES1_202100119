@@ -21,16 +21,32 @@ trap ctrl_c INT
 clear
 echo -e "${cCyan}[!] Build a Imagenes y pusheo [!]${cNone}"
 echo -e "${cRed}[!] Presiona Enter para continuar [!]${cNone}"
-read -r 
+# read -r 
 
 pwdOriginial=$(pwd)
 pwdConsumerRabbit=./Backend/Golang/Costumers/RabbitMQ
+pwdGoGRPC=./Backend/Golang/API_gRPC
+pwdServerGRPCKafka=./Backend/Golang/gRPC_Servers/Kafka
+
 
 # build y push de la imagen de Consumer RabbitMQ
 cd "$pwdConsumerRabbit"
 docker build -t sopesp2-consumer-rabbit:1.0 .
 docker tag sopesp2-consumer-rabbit:1.0 smillermp/sopesp2-consumer-rabbit:1.0 
 docker push smillermp/sopesp2-consumer-rabbit:1.0 
+cd "$pwdOriginial"
 
+cd "$pwdGoGRPC"
+docker build -t sopesp2-go-api-grpc:1.0 .
+docker tag sopesp2-go-api-grpc:1.0 smillermp/sopesp2-go-api-grpc:1.0
+docker push smillermp/sopesp2-go-api-grpc:1.0
+cd "$pwdOriginial"
+
+cd "$pwdServerGRPCKafka"
+echo -e "la ruta es: $pwdServerGRPCKafka"
+docker build -t sopesp2-grpc-server-kafka:1.0 .
+docker tag sopesp2-grpc-server-kafka:1.0 smillermp/sopesp2-grpc-server-kafka:1.0
+docker push smillermp/sopesp2-grpc-server-kafka:1.0
+cd "$pwdOriginial"
 
 cd "$pwdOriginial"

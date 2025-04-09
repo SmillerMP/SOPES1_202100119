@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sopesp2-deployment-grpc-server-rabbitmq
+  name: sopesp2-deployment-grpc-server-kafka
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sopesp2-grpc-server-rabbitmq
+      app: sopesp2-grpc-server-kafka
   template:
     metadata:
       labels:
-        app: sopesp2-grpc-server-rabbitmq
+        app: sopesp2-grpc-server-kafka
     spec:
       containers:
-        - name: sopesp2-grpc-server-rabbitmq
-          image: smillermp/sopesp2-grpc-server-rabbit:1.0 
+        - name: sopesp2-grpc-server-kafka
+          image: smillermp/sopesp2-grpc-server-kafka:1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 50052
           env:
             - name: GRPC_PORT
-              value: "50052"
-            - name: RABBITMQ_SERVER
-              value: sopesp2-service-rabbitmq:5672
+              value: "50051"
+            - name: KAFKA_SERVER
+              value: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
           resources:
             requests:
               memory: "128Mi"

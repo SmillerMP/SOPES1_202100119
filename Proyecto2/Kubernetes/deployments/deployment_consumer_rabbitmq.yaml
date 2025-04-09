@@ -15,6 +15,7 @@ spec:
       containers:
         - name: sopesp2-consumer-rabbimq
           image: smillermp/sopesp2-consumer-rabbit:1.0 
+          imagePullPolicy: Always
           env:
             - name: RABBITMQ_SERVER
               value: "sopesp2-service-rabbitmq:5672"

@@ -21,7 +21,7 @@ spec:
             - name: API_PORT
               value: "8010"
             - name: GRPC_SERVER_KAFKA
-              value: "gRPC_kafka:50051"
+              value: "sopesp2-service-grpc-server-kafka:50051"
             - name: GRPC_SERVER_RABBITMQ
               value: "sopesp2-service-grpc-server-rabbitmq:50052"
 

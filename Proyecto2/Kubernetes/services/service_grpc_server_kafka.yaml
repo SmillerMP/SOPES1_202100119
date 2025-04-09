@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sopesp2-service-grpc-server-kafka
+spec:
+  selector:
+    app: sopesp2-grpc-server-kafka
+  ports:
+    - protocol: TCP
+      port: 50051          # El puerto del servicio en el clúster
+      targetPort: 50051    # El puerto del contenedor
+  type: ClusterIP

@@ -66,27 +66,27 @@ func main() {
 			})
 		}
 
-		// // Conectar al primer servidor gRPC
-		// connKafka, err := grpc.Dial(grpcServerKafka, grpc.WithInsecure())
-		// if err != nil {
-		// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-		// 		"error": "Error connecting to gRPC server Kafka",
-		// 	})
-		// }
-		// defer connKafka.Close()
+		// Conectar al primer servidor gRPC
+		connKafka, err := grpc.Dial(grpcServerKafka, grpc.WithInsecure())
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Error connecting to gRPC server Kafka",
+			})
+		}
+		defer connKafka.Close()
 
-		// client1 := weatherpb.NewWeatherServiceClient(connKafka)
+		client1 := weatherpb.NewWeatherServiceClient(connKafka)
 
-		// // Enviar los datos al primer servidor
-		// responseKafka, err := client1.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
-		// 	Weather: weatherList,
-		// })
-		// if err != nil {
-		// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-		// 		"error":   "Error al enviar datos al servidor gRPC Kafka",
-		// 		"details": err.Error(),
-		// 	})
-		// }
+		// Enviar los datos al primer servidor
+		responseKafka, err := client1.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
+			Weather: weatherList,
+		})
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error":   "Error al enviar datos al servidor gRPC Kafka",
+				"details": err.Error(),
+			})
+		}
 
 		// Conectar al segundo servidor gRPC
 		connRabbit, err := grpc.Dial(grpcServerRabbit, grpc.WithInsecure())
@@ -113,7 +113,7 @@ func main() {
 		// Manejar las respuestas de ambos servidores
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"message": "Datos enviados a ambos servidores gRPC",
-			// "status1": responseKafka.Status,
+			"status1": responseKafka.Status,
 			"status2": responseRabbit.Status,
 		})
 	})

@@ -15,6 +15,7 @@ spec:
       containers:
         - name: sopesp2-rust
           image: smillermp/sopesp2-rust:1.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           env:
