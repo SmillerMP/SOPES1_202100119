@@ -18,7 +18,7 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "id": 3,
+    "id": 1,
     "links": [],
     "panels": [
       {
@@ -37,7 +37,7 @@
       {
         "datasource": {
           "type": "redis-datasource",
-          "uid": "deiivnw98lvr4f"
+          "uid": "${valkey_ds}"
         },
         "fieldConfig": {
           "defaults": {
@@ -132,6 +132,10 @@
         "targets": [
           {
             "command": "get",
+            "datasource": {
+              "type": "redis-datasource",
+              "uid": "${valkey_ds}"
+            },
             "keyName": "total",
             "query": "",
             "refId": "A",
@@ -145,7 +149,7 @@
       {
         "datasource": {
           "type": "redis-datasource",
-          "uid": "deiivnw98lvr4f"
+          "uid": "${valkey_ds}"
         },
         "fieldConfig": {
           "defaults": {
@@ -223,8 +227,8 @@
           {
             "command": "hgetall",
             "datasource": {
-              "type": "valkey-datasource",
-              "uid": "fehgaup2j42dce"
+              "type": "redis-datasource",
+              "uid": "${valkey_ds}"
             },
             "field": "",
             "keyName": "contador:paises",
@@ -254,7 +258,7 @@
       {
         "datasource": {
           "type": "redis-datasource",
-          "uid": "aeiivpvc5l7uoa"
+          "uid": "${redis_ds}"
         },
         "fieldConfig": {
           "defaults": {
@@ -351,7 +355,7 @@
             "command": "get",
             "datasource": {
               "type": "redis-datasource",
-              "uid": "aeiivpvc5l7uoa"
+              "uid": "${redis_ds}"
             },
             "keyName": "total",
             "query": "",
@@ -366,7 +370,7 @@
       {
         "datasource": {
           "type": "redis-datasource",
-          "uid": "aeiivpvc5l7uoa"
+          "uid": "${redis_ds}"
         },
         "fieldConfig": {
           "defaults": {
@@ -445,7 +449,7 @@
             "command": "hgetall",
             "datasource": {
               "type": "redis-datasource",
-              "uid": "aeiivpvc5l7uoa"
+              "uid": "${redis_ds}"
             },
             "field": "",
             "keyName": "contador:paises",
@@ -475,7 +479,7 @@
       {
         "datasource": {
           "type": "redis-datasource",
-          "uid": "deiivnw98lvr4f"
+          "uid": "${valkey_ds}"
         },
         "fieldConfig": {
           "defaults": {
@@ -582,6 +586,10 @@
         "targets": [
           {
             "command": "info",
+            "datasource": {
+              "type": "redis-datasource",
+              "uid": "${valkey_ds}"
+            },
             "field": "used_memory",
             "hide": false,
             "query": "",
@@ -600,7 +608,7 @@
       {
         "datasource": {
           "type": "redis-datasource",
-          "uid": "deiivnw98lvr4f"
+          "uid": "${valkey_ds}"
         },
         "description": "Mensajes por Segundo",
         "fieldConfig": {
@@ -655,6 +663,10 @@
         "targets": [
           {
             "command": "info",
+            "datasource": {
+              "type": "redis-datasource",
+              "uid": "${valkey_ds}"
+            },
             "field": "instantaneous_ops_per_sec",
             "keyName": "total",
             "query": "",
@@ -672,7 +684,7 @@
       {
         "datasource": {
           "type": "redis-datasource",
-          "uid": "aeiivpvc5l7uoa"
+          "uid": "${redis_ds}"
         },
         "description": "Mensajes por segundo en redis",
         "fieldConfig": {
@@ -729,7 +741,7 @@
             "command": "info",
             "datasource": {
               "type": "redis-datasource",
-              "uid": "aeiivpvc5l7uoa"
+              "uid": "${redis_ds}"
             },
             "field": "instantaneous_ops_per_sec",
             "keyName": "total",
@@ -748,7 +760,7 @@
       {
         "datasource": {
           "type": "redis-datasource",
-          "uid": "aeiivpvc5l7uoa"
+          "uid": "${redis_ds}"
         },
         "fieldConfig": {
           "defaults": {
@@ -857,7 +869,7 @@
             "command": "info",
             "datasource": {
               "type": "redis-datasource",
-              "uid": "aeiivpvc5l7uoa"
+              "uid": "${redis_ds}"
             },
             "field": "used_memory",
             "hide": false,
@@ -880,7 +892,35 @@
     "schemaVersion": 41,
     "tags": [],
     "templating": {
-      "list": []
+      "list": [
+        {
+          "allowCustomValue": true,
+          "current": {
+            "text": "valkey-datasource",
+            "value": "ceimn8pk3sv7ka"
+          },
+          "includeAll": false,
+          "name": "valkey_ds",
+          "options": [],
+          "query": "redis-datasource",
+          "refresh": 1,
+          "regex": "^valkey-datasource$",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "redis-datasource",
+            "value": "feimn7mg1je9sc"
+          },
+          "description": "",
+          "name": "redis_ds",
+          "options": [],
+          "query": "redis-datasource",
+          "refresh": 1,
+          "regex": "^redis-datasource$",
+          "type": "datasource"
+        }
+      ]
     },
     "time": {
       "from": "now-5m",
@@ -890,5 +930,5 @@
     "timezone": "browser",
     "title": "Graficas-dbs",
     "uid": "deiiwdniznqbkf",
-    "version": 7
+    "version": 3
   }
