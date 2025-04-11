@@ -92,24 +92,40 @@ func main() {
 		// Enviar los datos a ambos servidores en paralelo
 		var wg sync.WaitGroup
 		var kafkaErr, rabbitErr error
-		var responseKafka *weatherpb.WeatherResponse
-		var responseRabbit *weatherpb.WeatherResponse
 
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			responseKafka, kafkaErr = client1.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
-				Weather: weatherList,
-			})
-		}()
+		chunkSize := (len(weatherList) + 9) / 10
 
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			responseRabbit, rabbitErr = client2.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
-				Weather: weatherList,
-			})
-		}()
+		wg.Add(10)
+		for i := 0; i < 10; i++ {
+			start := i * chunkSize
+			end := start + chunkSize
+			if end > len(weatherList) {
+				end = len(weatherList)
+			}
+
+			go func(chunk []*weatherpb.WeatherRequest) {
+				defer wg.Done()
+				_, kafkaErr = client1.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
+					Weather: chunk,
+				})
+			}(weatherList[start:end])
+		}
+
+		wg.Add(10)
+		for i := 0; i < 10; i++ {
+			start := i * chunkSize
+			end := start + chunkSize
+			if end > len(weatherList) {
+				end = len(weatherList)
+			}
+
+			go func(chunk []*weatherpb.WeatherRequest) {
+				defer wg.Done()
+				_, rabbitErr = client2.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
+					Weather: chunk,
+				})
+			}(weatherList[start:end])
+		}
 
 		wg.Wait()
 
@@ -130,8 +146,6 @@ func main() {
 
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"message": "Datos enviados a ambos servidores gRPC",
-			"status1": responseKafka.Status,
-			"status2": responseRabbit.Status,
 		})
 	})
 
