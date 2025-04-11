@@ -10,4 +10,4 @@ spec:
       protocol: TCP
       port: 6380
       targetPort: 6379
-  type: LoadBalancer
+  type: ClusterIP

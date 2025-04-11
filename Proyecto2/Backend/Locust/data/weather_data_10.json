@@ -1,0 +1,52 @@
+[
+    {
+        "country": "Angola",
+        "weather": "Neblinoso",
+        "description": "Hay neblina"
+    },
+    {
+        "country": "Nicaragua",
+        "weather": "Brillante",
+        "description": "Amanecer brillante"
+    },
+    {
+        "country": "Costa Rica",
+        "weather": "Lluvioso",
+        "description": "Está lloviendo"
+    },
+    {
+        "country": "Italia",
+        "weather": "Fresco",
+        "description": "Clima fresco"
+    },
+    {
+        "country": "Sudáfrica",
+        "weather": "Frío",
+        "description": "Frío extremo"
+    },
+    {
+        "country": "Sri Lanka",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "Argelia",
+        "weather": "Brillante",
+        "description": "Amanecer brillante"
+    },
+    {
+        "country": "Micronesia",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "Egipto",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    },
+    {
+        "country": "Etiopía",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    }
+]

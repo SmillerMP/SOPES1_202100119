@@ -1,9 +1,15 @@
 apiVersion: 1
 datasources:
-  - name: valkey
+  - name: valkey-datasource
     type: "redis-datasource"  # UID del plugin instalado
     access: "proxy"
-    url: "redis://valkey:6379"  # URL del backend de datos
+    url: "redis://sopesp2-service-valkey:6379"  # URL del backend de datos
     isDefault: true
+    jsonData:
+      authType: "none"  # Configuración sin autenticación (ajusta si es necesario)
+  - name: redis-datasource
+    type: "redis-datasource"  # UID del plugin instalado
+    access: "proxy"
+    url: "redis://sopesp2-service-redis:6380"  # URL del backend de datos
     jsonData:
       authType: "none"  # Configuración sin autenticación (ajusta si es necesario)

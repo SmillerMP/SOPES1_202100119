@@ -25,8 +25,8 @@ spec:
               value: "http://sopesp2-service-go-grpc:8010/weather" # URL del servicio gRPC de Go
           resources:
             requests:
-              memory: "128Mi"
               cpu: "100m"
-            limits:
               memory: "256Mi"
-              cpu: "250m"
+            limits:
+              cpu: "200m"
+              memory: "512Mi"

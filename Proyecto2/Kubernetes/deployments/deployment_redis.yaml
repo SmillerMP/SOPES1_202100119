@@ -25,8 +25,8 @@ spec:
             #   value: "FLUSHDB,FLUSHALL"
           resources:
             requests:
+              cpu: "50m"
               memory: "128Mi"
-              cpu: "100m"
             limits:
+              cpu: "100m"
               memory: "256Mi"
-              cpu: "250m"

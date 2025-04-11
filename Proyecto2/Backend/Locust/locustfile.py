@@ -7,7 +7,7 @@ class WeatherUser(HttpUser):
 
         # deserializar la data
 
-        with open ('./data/weather_data_10000.json', 'r') as file:
+        with open ('./data/weather_data_100.json', 'r') as file:
             data = json.load(file)
 
         # enviar la data

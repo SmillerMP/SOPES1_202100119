@@ -1,0 +1,502 @@
+[
+    {
+        "country": "Angola",
+        "weather": "Neblinoso",
+        "description": "Hay neblina"
+    },
+    {
+        "country": "Nicaragua",
+        "weather": "Brillante",
+        "description": "Amanecer brillante"
+    },
+    {
+        "country": "Costa Rica",
+        "weather": "Lluvioso",
+        "description": "Está lloviendo"
+    },
+    {
+        "country": "Italia",
+        "weather": "Fresco",
+        "description": "Clima fresco"
+    },
+    {
+        "country": "Sudáfrica",
+        "weather": "Frío",
+        "description": "Frío extremo"
+    },
+    {
+        "country": "Sri Lanka",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "Argelia",
+        "weather": "Brillante",
+        "description": "Amanecer brillante"
+    },
+    {
+        "country": "Micronesia",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "Egipto",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    },
+    {
+        "country": "Etiopía",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    },
+    {
+        "country": "Estados Unidos",
+        "weather": "Despejado",
+        "description": "Cielo despejado"
+    },
+    {
+        "country": "Dinamarca",
+        "weather": "Soleado",
+        "description": "Hace sol"
+    },
+    {
+        "country": "Uruguay",
+        "weather": "Lluvias ligeras",
+        "description": "Lluvias ligeras"
+    },
+    {
+        "country": "Grecia",
+        "weather": "Caluroso",
+        "description": "Olas de calor"
+    },
+    {
+        "country": "Nueva Zelanda",
+        "weather": "Lluvioso",
+        "description": "Está lloviendo"
+    },
+    {
+        "country": "Países Bajos",
+        "weather": "Tormentoso",
+        "description": "Hay tormenta"
+    },
+    {
+        "country": "Turquía",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "México",
+        "weather": "Lluvioso",
+        "description": "Está lloviendo"
+    },
+    {
+        "country": "Uzbekistán",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    },
+    {
+        "country": "Sudáfrica",
+        "weather": "Agradable",
+        "description": "Temperatura agradable"
+    },
+    {
+        "country": "Israel",
+        "weather": "Lluvias torrenciales",
+        "description": "Lluvias torrenciales"
+    },
+    {
+        "country": "Indonesia",
+        "weather": "Soleado",
+        "description": "Hace sol"
+    },
+    {
+        "country": "Indonesia",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "Perú",
+        "weather": "Con granizo",
+        "description": "Granizo"
+    },
+    {
+        "country": "Japón",
+        "weather": "Lluvioso",
+        "description": "Está lloviendo"
+    },
+    {
+        "country": "Brasil",
+        "weather": "Neblinoso",
+        "description": "Hay neblina"
+    },
+    {
+        "country": "México",
+        "weather": "Despejado",
+        "description": "Cielo despejado"
+    },
+    {
+        "country": "Argentina",
+        "weather": "Lluvias ligeras",
+        "description": "Lluvias ligeras"
+    },
+    {
+        "country": "Pakistán",
+        "weather": "Lluvias ligeras",
+        "description": "Lluvias ligeras"
+    },
+    {
+        "country": "Irlanda",
+        "weather": "Caluroso",
+        "description": "Olas de calor"
+    },
+    {
+        "country": "Corea del Sur",
+        "weather": "Despejado",
+        "description": "Cielo despejado"
+    },
+    {
+        "country": "Papúa Nueva Guinea",
+        "weather": "Lluvias torrenciales",
+        "description": "Lluvias torrenciales"
+    },
+    {
+        "country": "Tonga",
+        "weather": "Húmedo",
+        "description": "Clima húmedo"
+    },
+    {
+        "country": "Libia",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "Colombia",
+        "weather": "Cálido",
+        "description": "Clima cálido"
+    },
+    {
+        "country": "Polonia",
+        "weather": "Neblinoso",
+        "description": "Hay neblina"
+    },
+    {
+        "country": "El Salvador",
+        "weather": "Con granizo",
+        "description": "Granizo"
+    },
+    {
+        "country": "Nigeria",
+        "weather": "Caluroso",
+        "description": "Olas de calor"
+    },
+    {
+        "country": "Panamá",
+        "weather": "Cálido",
+        "description": "Clima cálido"
+    },
+    {
+        "country": "Cuba",
+        "weather": "Nubloso",
+        "description": "Está nublado"
+    },
+    {
+        "country": "Irak",
+        "weather": "Neblinoso",
+        "description": "Hay neblina"
+    },
+    {
+        "country": "Samoa",
+        "weather": "Fresco",
+        "description": "Clima fresco"
+    },
+    {
+        "country": "Portugal",
+        "weather": "Cálido",
+        "description": "Clima cálido"
+    },
+    {
+        "country": "Rusia",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "Maldivas",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "Portugal",
+        "weather": "Caluroso",
+        "description": "Olas de calor"
+    },
+    {
+        "country": "Corea del Sur",
+        "weather": "Neblinoso",
+        "description": "Hay neblina"
+    },
+    {
+        "country": "Puerto Rico",
+        "weather": "Ventoso",
+        "description": "Vientos fuertes"
+    },
+    {
+        "country": "El Salvador",
+        "weather": "Caluroso",
+        "description": "Olas de calor"
+    },
+    {
+        "country": "Túnez",
+        "weather": "Con granizo",
+        "description": "Granizo"
+    },
+    {
+        "country": "Angola",
+        "weather": "Seco",
+        "description": "Clima seco"
+    },
+    {
+        "country": "China",
+        "weather": "Con granizo",
+        "description": "Granizo"
+    },
+    {
+        "country": "Hungría",
+        "weather": "Fresco",
+        "description": "Clima fresco"
+    },
+    {
+        "country": "Botsuana",
+        "weather": "Brillante",
+        "description": "Amanecer brillante"
+    },
+    {
+        "country": "España",
+        "weather": "Lluvias ligeras",
+        "description": "Lluvias ligeras"
+    },
+    {
+        "country": "Mongolia",
+        "weather": "Caluroso",
+        "description": "Olas de calor"
+    },
+    {
+        "country": "Dinamarca",
+        "weather": "Seco",
+        "description": "Clima seco"
+    },
+    {
+        "country": "Uzbekistán",
+        "weather": "Neblinoso",
+        "description": "Hay neblina"
+    },
+    {
+        "country": "Zambia",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    },
+    {
+        "country": "Estados Unidos",
+        "weather": "Brillante",
+        "description": "Amanecer brillante"
+    },
+    {
+        "country": "Indonesia",
+        "weather": "Lluvioso",
+        "description": "Está lloviendo"
+    },
+    {
+        "country": "El Salvador",
+        "weather": "Despejado",
+        "description": "Cielo despejado"
+    },
+    {
+        "country": "Mongolia",
+        "weather": "Agradable",
+        "description": "Temperatura agradable"
+    },
+    {
+        "country": "Tonga",
+        "weather": "Cálido",
+        "description": "Clima cálido"
+    },
+    {
+        "country": "Namibia",
+        "weather": "Despejado",
+        "description": "Cielo despejado"
+    },
+    {
+        "country": "Angola",
+        "weather": "Lluvioso",
+        "description": "Está lloviendo"
+    },
+    {
+        "country": "Kenia",
+        "weather": "Tormentoso",
+        "description": "Hay tormenta"
+    },
+    {
+        "country": "Argentina",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    },
+    {
+        "country": "Ghana",
+        "weather": "Fresco",
+        "description": "Clima fresco"
+    },
+    {
+        "country": "Venezuela",
+        "weather": "Fresco",
+        "description": "Clima fresco"
+    },
+    {
+        "country": "Turkmenistán",
+        "weather": "Con granizo",
+        "description": "Granizo"
+    },
+    {
+        "country": "República Dominicana",
+        "weather": "Despejado",
+        "description": "Cielo despejado"
+    },
+    {
+        "country": "Nigeria",
+        "weather": "Lluvias ligeras",
+        "description": "Lluvias ligeras"
+    },
+    {
+        "country": "Polonia",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    },
+    {
+        "country": "Perú",
+        "weather": "Cálido",
+        "description": "Clima cálido"
+    },
+    {
+        "country": "Filipinas",
+        "weather": "Nubloso",
+        "description": "Está nublado"
+    },
+    {
+        "country": "Namibia",
+        "weather": "Soleado",
+        "description": "Hace sol"
+    },
+    {
+        "country": "Turkmenistán",
+        "weather": "Cálido",
+        "description": "Atardecer cálido"
+    },
+    {
+        "country": "Kazajistán",
+        "weather": "Húmedo",
+        "description": "Clima húmedo"
+    },
+    {
+        "country": "Namibia",
+        "weather": "Agradable",
+        "description": "Temperatura agradable"
+    },
+    {
+        "country": "Israel",
+        "weather": "Tormentoso",
+        "description": "Hay tormenta"
+    },
+    {
+        "country": "Uzbekistán",
+        "weather": "Brillante",
+        "description": "Amanecer brillante"
+    },
+    {
+        "country": "Bolivia",
+        "weather": "Ventoso",
+        "description": "Vientos fuertes"
+    },
+    {
+        "country": "Colombia",
+        "weather": "Tormentoso",
+        "description": "Hay tormenta"
+    },
+    {
+        "country": "Kenia",
+        "weather": "Cálido",
+        "description": "Clima cálido"
+    },
+    {
+        "country": "Kiribati",
+        "weather": "Lluvias torrenciales",
+        "description": "Lluvias torrenciales"
+    },
+    {
+        "country": "Países Bajos",
+        "weather": "Soleado",
+        "description": "Hace sol"
+    },
+    {
+        "country": "Panamá",
+        "weather": "Con granizo",
+        "description": "Granizo"
+    },
+    {
+        "country": "Madagascar",
+        "weather": "Soleado",
+        "description": "Hace sol"
+    },
+    {
+        "country": "Irlanda",
+        "weather": "Brillante",
+        "description": "Amanecer brillante"
+    },
+    {
+        "country": "Austria",
+        "weather": "Fresco",
+        "description": "Clima fresco"
+    },
+    {
+        "country": "Estados Unidos",
+        "weather": "Tormentoso",
+        "description": "Hay tormenta"
+    },
+    {
+        "country": "Portugal",
+        "weather": "Neblinoso",
+        "description": "Hay neblina"
+    },
+    {
+        "country": "Perú",
+        "weather": "Ventoso",
+        "description": "Vientos fuertes"
+    },
+    {
+        "country": "Guatemala",
+        "weather": "Estrellado",
+        "description": "Noche estrellada"
+    },
+    {
+        "country": "México",
+        "weather": "Caluroso",
+        "description": "Olas de calor"
+    },
+    {
+        "country": "Nicaragua",
+        "weather": "Tormentoso",
+        "description": "Hay tormenta"
+    },
+    {
+        "country": "Etiopía",
+        "weather": "Nubloso",
+        "description": "Está nublado"
+    },
+    {
+        "country": "Guatemala",
+        "weather": "Seco",
+        "description": "Clima seco"
+    },
+    {
+        "country": "Filipinas",
+        "weather": "Lluvias torrenciales",
+        "description": "Lluvias torrenciales"
+    }
+]
