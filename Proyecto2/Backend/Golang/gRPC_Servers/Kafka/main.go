@@ -24,7 +24,7 @@ func initKafka() *kafka.Conn {
 
 	kafkaServer := os.Getenv("KAFKA_SERVER")
 	if kafkaServer == "" {
-		log.Fatalf("La variable de entorno RABBITMQ_SERVER no está definida")
+		log.Fatalf("La variable de entorno KAFKA_SERVER no está definida")
 	}
 
 	// localhost:9092

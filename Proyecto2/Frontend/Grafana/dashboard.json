@@ -18,7 +18,7 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "id": 4,
+    "id": 3,
     "links": [],
     "panels": [
       {
@@ -31,13 +31,13 @@
         },
         "id": 3,
         "panels": [],
-        "title": "Graficas",
+        "title": "Valkey",
         "type": "row"
       },
       {
         "datasource": {
-          "type": "valkey-datasource",
-          "uid": "P36C0C6B32A5CDCBE"
+          "type": "redis-datasource",
+          "uid": "deiivnw98lvr4f"
         },
         "fieldConfig": {
           "defaults": {
@@ -83,8 +83,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 }
               ]
             }
@@ -129,7 +128,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.5.2",
+        "pluginVersion": "11.6.0",
         "targets": [
           {
             "command": "get",
@@ -145,8 +144,8 @@
       },
       {
         "datasource": {
-          "type": "valkey-datasource",
-          "uid": "P36C0C6B32A5CDCBE"
+          "type": "redis-datasource",
+          "uid": "deiivnw98lvr4f"
         },
         "fieldConfig": {
           "defaults": {
@@ -179,8 +178,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 }
               ]
             }
@@ -220,7 +218,7 @@
           "xTickLabelRotation": 0,
           "xTickLabelSpacing": 100
         },
-        "pluginVersion": "11.5.2",
+        "pluginVersion": "11.6.0",
         "targets": [
           {
             "command": "hgetall",
@@ -241,80 +239,243 @@
         "type": "barchart"
       },
       {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 16
+        },
+        "id": 6,
+        "panels": [],
+        "title": "Redis",
+        "type": "row"
+      },
+      {
         "datasource": {
-          "type": "valkey-datasource",
-          "uid": "P36C0C6B32A5CDCBE"
+          "type": "redis-datasource",
+          "uid": "aeiivpvc5l7uoa"
         },
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": true,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Data",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "displayName": "Mensajes Consumidos",
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Mensajes Consumidos"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 17
+        },
+        "id": 8,
+        "options": {
+          "legend": {
+            "calcs": [
+              "last"
+            ],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.6.0",
+        "targets": [
+          {
+            "command": "get",
+            "datasource": {
+              "type": "redis-datasource",
+              "uid": "aeiivpvc5l7uoa"
+            },
+            "keyName": "total",
+            "query": "",
+            "refId": "A",
+            "streaming": true,
+            "type": "command"
+          }
+        ],
+        "title": "Kafka x Redis Consumer",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "redis-datasource",
+          "uid": "aeiivpvc5l7uoa"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 1,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
             },
             "mappings": [],
             "thresholds": {
-              "mode": "percentage",
+              "mode": "absolute",
               "steps": [
                 {
-                  "color": "dark-red",
-                  "value": null
-                },
-                {
-                  "color": "semi-dark-yellow",
-                  "value": 55
-                },
-                {
-                  "color": "dark-green",
-                  "value": 75
+                  "color": "green"
                 }
               ]
-            },
-            "unit": "mps"
+            }
           },
           "overrides": []
         },
         "gridPos": {
           "h": 8,
-          "w": 6,
+          "w": 24,
           "x": 0,
-          "y": 16
+          "y": 24
         },
-        "id": 4,
+        "id": 9,
         "options": {
-          "minVizHeight": 0,
-          "minVizWidth": 75,
-          "orientation": "auto",
-          "reduceOptions": {
+          "barRadius": 0,
+          "barWidth": 1,
+          "colorByField": "EP",
+          "fullHighlight": false,
+          "groupWidth": 0.9,
+          "legend": {
             "calcs": [
               "lastNotNull"
             ],
-            "fields": "",
-            "values": false
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
           },
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true,
-          "sizing": "auto"
+          "orientation": "auto",
+          "showValue": "always",
+          "stacking": "none",
+          "text": {},
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "none",
+            "sort": "none"
+          },
+          "xTickLabelRotation": 0,
+          "xTickLabelSpacing": 100
         },
-        "pluginVersion": "11.5.2",
+        "pluginVersion": "11.6.0",
         "targets": [
           {
-            "command": "info",
-            "field": "instantaneous_ops_per_sec",
-            "keyName": "total",
+            "command": "hgetall",
+            "datasource": {
+              "type": "redis-datasource",
+              "uid": "aeiivpvc5l7uoa"
+            },
+            "field": "",
+            "keyName": "contador:paises",
             "query": "",
             "refId": "A",
-            "section": "stats",
             "streaming": true,
-            "streamingDataType": "TimeSeries",
-            "streamingInterval": 0,
+            "streamingDataType": "DataFrame",
             "type": "command"
           }
         ],
-        "title": "Mensajes por Segundo",
-        "type": "gauge"
+        "title": "Data por país",
+        "type": "barchart"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 32
+        },
+        "id": 7,
+        "panels": [],
+        "title": "Comparacion",
+        "type": "row"
       },
       {
         "datasource": {
-          "uid": "P36C0C6B32A5CDCBE"
+          "type": "redis-datasource",
+          "uid": "deiivnw98lvr4f"
         },
         "fieldConfig": {
           "defaults": {
@@ -348,8 +509,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 }
               ]
             },
@@ -390,9 +550,9 @@
         },
         "gridPos": {
           "h": 5,
-          "w": 9,
-          "x": 6,
-          "y": 16
+          "w": 10,
+          "x": 0,
+          "y": 33
         },
         "id": 5,
         "options": {
@@ -418,7 +578,7 @@
           "xTickLabelRotation": 0,
           "xTickLabelSpacing": 0
         },
-        "pluginVersion": "11.5.2",
+        "pluginVersion": "11.6.0",
         "targets": [
           {
             "command": "info",
@@ -434,13 +594,290 @@
             "type": "command"
           }
         ],
-        "title": "Uso de memoria RAM",
+        "title": "Uso de memoria RAM en Valkey",
+        "type": "barchart"
+      },
+      {
+        "datasource": {
+          "type": "redis-datasource",
+          "uid": "deiivnw98lvr4f"
+        },
+        "description": "Mensajes por Segundo",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 55
+                },
+                {
+                  "color": "dark-green",
+                  "value": 75
+                }
+              ]
+            },
+            "unit": "mps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 7,
+          "x": 10,
+          "y": 33
+        },
+        "id": 4,
+        "options": {
+          "minVizHeight": 0,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "11.6.0",
+        "targets": [
+          {
+            "command": "info",
+            "field": "instantaneous_ops_per_sec",
+            "keyName": "total",
+            "query": "",
+            "refId": "A",
+            "section": "stats",
+            "streaming": true,
+            "streamingDataType": "TimeSeries",
+            "streamingInterval": 0,
+            "type": "command"
+          }
+        ],
+        "title": "Msg/s Valkey",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "redis-datasource",
+          "uid": "aeiivpvc5l7uoa"
+        },
+        "description": "Mensajes por segundo en redis",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 55
+                },
+                {
+                  "color": "dark-green",
+                  "value": 75
+                }
+              ]
+            },
+            "unit": "mps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 7,
+          "x": 17,
+          "y": 33
+        },
+        "id": 11,
+        "options": {
+          "minVizHeight": 0,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "11.6.0",
+        "targets": [
+          {
+            "command": "info",
+            "datasource": {
+              "type": "redis-datasource",
+              "uid": "aeiivpvc5l7uoa"
+            },
+            "field": "instantaneous_ops_per_sec",
+            "keyName": "total",
+            "query": "",
+            "refId": "A",
+            "section": "stats",
+            "streaming": true,
+            "streamingDataType": "TimeSeries",
+            "streamingInterval": 0,
+            "type": "command"
+          }
+        ],
+        "title": "Msg/s Redis",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "redis-datasource",
+          "uid": "aeiivpvc5l7uoa"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "left",
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 0,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 4,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "RAM"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "light-blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "used_memory"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "light-red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 10,
+          "x": 0,
+          "y": 38
+        },
+        "id": 10,
+        "options": {
+          "barRadius": 0.15,
+          "barWidth": 0.76,
+          "fullHighlight": false,
+          "groupWidth": 0.7,
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "orientation": "horizontal",
+          "showValue": "auto",
+          "stacking": "none",
+          "text": {},
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "none",
+            "sort": "none"
+          },
+          "xTickLabelRotation": 0,
+          "xTickLabelSpacing": 0
+        },
+        "pluginVersion": "11.6.0",
+        "targets": [
+          {
+            "command": "info",
+            "datasource": {
+              "type": "redis-datasource",
+              "uid": "aeiivpvc5l7uoa"
+            },
+            "field": "used_memory",
+            "hide": false,
+            "query": "",
+            "refId": "A",
+            "section": "memory",
+            "streaming": true,
+            "streamingCapacity": 1,
+            "streamingDataType": "TimeSeries",
+            "streamingInterval": 1000,
+            "type": "command"
+          }
+        ],
+        "title": "Uso de memoria RAM en Redis",
         "type": "barchart"
       }
     ],
     "preload": false,
     "refresh": "",
-    "schemaVersion": 40,
+    "schemaVersion": 41,
     "tags": [],
     "templating": {
       "list": []
@@ -451,8 +888,7 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "Graficas",
-    "uid": "eeic00w0pqdj4f",
-    "version": 13,
-    "weekStart": ""
+    "title": "Graficas-dbs",
+    "uid": "deiiwdniznqbkf",
+    "version": 7
   }

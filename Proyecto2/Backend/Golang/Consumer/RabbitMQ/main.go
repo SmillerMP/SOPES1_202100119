@@ -103,7 +103,7 @@ func main() {
 		log.Fatalf("Error al crear el cliente de valkey: %v", err)
 	}
 	defer clientValkey.Close()
-	log.Printf("Conectando a Valkey en %s", "valkey:6379")
+	log.Printf("Conectando a Valkey en %s", valkeyServer)
 
 	// Conectar a RabbitMQ
 	conn, ch, err := createRabbitMQConnection(rabbitmq)

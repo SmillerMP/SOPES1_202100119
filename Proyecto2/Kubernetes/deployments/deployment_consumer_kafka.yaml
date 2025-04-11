@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sopesp2-deployment-consumer-rabbitmq
+  name: sopesp2-deployment-consumer-kafka
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: sopesp2-consumer-rabbitmq
+      app: sopesp2-consumer-kafka
   template:
     metadata:
       labels:
-        app: sopesp2-consumer-rabbitmq
+        app: sopesp2-consumer-kafka
     spec:
       containers:
-        - name: sopesp2-consumer-rabbimq
-          image: smillermp/sopesp2-consumer-rabbit:1.0 
+        - name: sopesp2-consumer-kafka
+          image: smillermp/sopesp2-consumer-kafka:1.0 
           imagePullPolicy: Always
           env:
-            - name: RABBITMQ_SERVER
-              value: "sopesp2-service-rabbitmq:5672"
+            - name: KAFKA_SERVER
+              value: "my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
             - name: NO_GOROUTINES
               value: "15"
-            - name: VALKEY_SERVER
-              value: "sopesp2-service-valkey:6379"
+            - name: REDIS_SERVER
+              value: "sopesp2-service-redis:6380"
           resources:
             requests:
               memory: "256Mi"

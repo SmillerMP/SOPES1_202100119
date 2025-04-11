@@ -17,7 +17,7 @@ spec:
           image: smillermp/sopesp2-grpc-server-kafka:1.0
           imagePullPolicy: Always
           ports:
-            - containerPort: 50052
+            - containerPort: 50051
           env:
             - name: GRPC_PORT
               value: "50051"

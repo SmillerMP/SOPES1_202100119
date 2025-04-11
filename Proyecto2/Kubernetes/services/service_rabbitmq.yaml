@@ -14,5 +14,5 @@ spec:
       protocol: TCP
       port: 15672
       targetPort: 15672
-      nodePort: 31000
-  type: NodePort
+      # nodePort: 31000
+  type: ClusterIP

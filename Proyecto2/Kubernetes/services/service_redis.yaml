@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sopesp2-service-redis
+spec:
+  selector:
+    app: redis
+  ports:
+    - name: management
+      protocol: TCP
+      port: 6380
+      targetPort: 6379
+  type: LoadBalancer

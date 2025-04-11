@@ -5,6 +5,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -77,17 +78,6 @@ func main() {
 
 		client1 := weatherpb.NewWeatherServiceClient(connKafka)
 
-		// Enviar los datos al primer servidor
-		responseKafka, err := client1.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
-			Weather: weatherList,
-		})
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error":   "Error al enviar datos al servidor gRPC Kafka",
-				"details": err.Error(),
-			})
-		}
-
 		// Conectar al segundo servidor gRPC
 		connRabbit, err := grpc.Dial(grpcServerRabbit, grpc.WithInsecure())
 		if err != nil {
@@ -99,18 +89,45 @@ func main() {
 
 		client2 := weatherpb.NewWeatherServiceClient(connRabbit)
 
-		// Enviar los datos al segundo servidor
-		responseRabbit, err := client2.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
-			Weather: weatherList,
-		})
-		if err != nil {
+		// Enviar los datos a ambos servidores en paralelo
+		var wg sync.WaitGroup
+		var kafkaErr, rabbitErr error
+		var responseKafka *weatherpb.WeatherResponse
+		var responseRabbit *weatherpb.WeatherResponse
+
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			responseKafka, kafkaErr = client1.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
+				Weather: weatherList,
+			})
+		}()
+
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			responseRabbit, rabbitErr = client2.SendWeatherData(context.Background(), &weatherpb.WeatherListRequest{
+				Weather: weatherList,
+			})
+		}()
+
+		wg.Wait()
+
+		// Manejar errores y respuestas
+		if kafkaErr != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error":   "Error al enviar datos al servidor gRPC RabbitMQ",
-				"details": err.Error(),
+				"error":   "Error al enviar datos al servidor gRPC Kafka",
+				"details": kafkaErr.Error(),
 			})
 		}
 
-		// Manejar las respuestas de ambos servidores
+		if rabbitErr != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error":   "Error al enviar datos al servidor gRPC RabbitMQ",
+				"details": rabbitErr.Error(),
+			})
+		}
+
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"message": "Datos enviados a ambos servidores gRPC",
 			"status1": responseKafka.Status,
