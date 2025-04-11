@@ -15,34 +15,30 @@ import (
 
 type server struct {
 	weatherpb.UnimplementedWeatherServiceServer
-	kafkaConn *kafka.Conn
+	kafkaWriter *kafka.Writer
 }
 
-func initKafka() *kafka.Conn {
+func initKafkaWriter() *kafka.Writer {
 	topic := "weather_data"
-	partition := 0
 
 	kafkaServer := os.Getenv("KAFKA_SERVER")
 	if kafkaServer == "" {
 		log.Fatalf("La variable de entorno KAFKA_SERVER no está definida")
 	}
 
-	// localhost:9092
-	conn, err := kafka.DialLeader(context.Background(), "tcp", kafkaServer, topic, partition)
-	if err != nil {
-		log.Fatal("failed to dial leader:", err)
+	return &kafka.Writer{
+		Addr:     kafka.TCP(kafkaServer),
+		Topic:    topic,
+		Balancer: &kafka.LeastBytes{},
 	}
-
-	return conn
 }
 
-func publishMessage(conn *kafka.Conn, message string) error {
-	_, err := conn.WriteMessages(
+func publishMessage(writer *kafka.Writer, message string) error {
+	return writer.WriteMessages(context.Background(),
 		kafka.Message{
 			Value: []byte(message),
 		},
 	)
-	return err
 }
 
 // SendWeatherData es el método que recibe los datos del clima
@@ -52,7 +48,7 @@ func (s *server) SendWeatherData(ctx context.Context, req *weatherpb.WeatherList
 		message := fmt.Sprintf("country: %s, weather: %s, description: %s",
 			weather.GetCountry(), weather.GetWeather(), weather.GetDescription())
 
-		err := publishMessage(s.kafkaConn, message)
+		err := publishMessage(s.kafkaWriter, message)
 		if err != nil {
 			return nil, fmt.Errorf("error al enviar el mensaje a Kafka: %v", err)
 		}
@@ -74,8 +70,8 @@ func main() {
 		log.Fatalf("La variable de entorno GRPC_PORT no está definida")
 	}
 
-	kafkaConn := initKafka()
-	defer kafkaConn.Close()
+	kafkaWriter := initKafkaWriter()
+	defer kafkaWriter.Close()
 
 	// Escuchar en el puerto especificado
 	listen, err := net.Listen("tcp", ":"+port)
@@ -87,7 +83,7 @@ func main() {
 	gRPCserver := grpc.NewServer()
 
 	weatherService := &server{
-		kafkaConn: kafkaConn,
+		kafkaWriter: kafkaWriter,
 	}
 
 	weatherpb.RegisterWeatherServiceServer(gRPCserver, weatherService)

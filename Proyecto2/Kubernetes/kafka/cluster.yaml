@@ -48,3 +48,17 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: weather-data
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  topicName: weather_data
+  partitions: 3
+  replicas: 1
+
+
