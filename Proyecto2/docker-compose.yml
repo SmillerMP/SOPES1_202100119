@@ -94,7 +94,7 @@ services:
         condition: service_healthy
 
   costumer_rabbitmq:
-    build: ./Backend/Golang/Costumers/RabbitMQ
+    build: ./Backend/Golang/Consumer/RabbitMQ
     environment:
       - RABBITMQ_SERVER=rabbitmq:5672
       - NO_GOROUTINES=20
