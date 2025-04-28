@@ -30,50 +30,57 @@ pwdGoGRPC=./Backend/Golang/API_gRPC
 pwdServerGRPCKafka=./Backend/Golang/gRPC_Servers/Kafka
 pwdServerGRPCRabbit=./Backend/Golang/gRPC_Servers/RabbitMQ
 pwdRustApi=./Backend/Rust/API
-pwdGrafana=./Backend/Grafana
+pwdGrafana=./Frontend/Grafana
+pwdjson=./Backend/Locust/data
+
+registry="34.46.182.53.nip.io/smillermp"
 
 
 # build y push de la imagen de Consumer RabbitMQ
 cd "$pwdConsumerRabbit"
 docker build -t sopesp2-consumer-rabbit:1.0 .
-docker tag sopesp2-consumer-rabbit:1.0 smillermp/sopesp2-consumer-rabbit:1.0 
-docker push smillermp/sopesp2-consumer-rabbit:1.0 
+docker tag sopesp2-consumer-rabbit:1.0 $registry/sopesp2-consumer-rabbit:1.0 
+docker push $registry/sopesp2-consumer-rabbit:1.0 
 cd "$pwdOriginial"
 
 cd "$pwdConsumerKafka"
 docker build -t sopesp2-consumer-kafka:1.0 .
-docker tag sopesp2-consumer-kafka:1.0 smillermp/sopesp2-consumer-kafka:1.0
-docker push smillermp/sopesp2-consumer-kafka:1.0
+docker tag sopesp2-consumer-kafka:1.0 $registry/sopesp2-consumer-kafka:1.0
+docker push $registry/sopesp2-consumer-kafka:1.0
 cd "$pwdOriginial"
 
 cd "$pwdGoGRPC"
 docker build -t sopesp2-go-api-grpc:1.0 .
-docker tag sopesp2-go-api-grpc:1.0 smillermp/sopesp2-go-api-grpc:1.0
-docker push smillermp/sopesp2-go-api-grpc:1.0
+docker tag sopesp2-go-api-grpc:1.0 $registry/sopesp2-go-api-grpc:1.0
+docker push $registry/sopesp2-go-api-grpc:1.0
 cd "$pwdOriginial"
 
 cd "$pwdServerGRPCKafka"
 docker build -t sopesp2-grpc-server-kafka:1.0 .
-docker tag sopesp2-grpc-server-kafka:1.0 smillermp/sopesp2-grpc-server-kafka:1.0
-docker push smillermp/sopesp2-grpc-server-kafka:1.0
+docker tag sopesp2-grpc-server-kafka:1.0 $registry/sopesp2-grpc-server-kafka:1.0
+docker push $registry/sopesp2-grpc-server-kafka:1.0
 cd "$pwdOriginial"
 
 cd "$pwdServerGRPCRabbit"
 docker build -t sopesp2-grpc-server-rabbit:1.0 .
-docker tag sopesp2-grpc-server-rabbit:1.0 smillermp/sopesp2-grpc-server-rabbit:1.0 
-docker push smillermp/sopesp2-grpc-server-rabbit:1.0 
+docker tag sopesp2-grpc-server-rabbit:1.0 $registry/sopesp2-grpc-server-rabbit:1.0 
+docker push $registry/sopesp2-grpc-server-rabbit:1.0 
 cd "$pwdOriginial"
 
 cd "$pwdRustApi"
 docker build -t sopesp2-rust-api:1.0 .
-docker tag sopesp2-rust-api:1.0 smillermp/sopesp2-rust-api:1.0
-docker push smillermp/sopesp2-rust-api:1.0
+docker tag sopesp2-rust-api:1.0 $registry/sopesp2-rust-api:1.0
+docker push $registry/sopesp2-rust-api:1.0
 cd "$pwdOriginial"
 
 cd "$pwdGrafana"
 docker build -t sopesp2-grafana:1.0 .
-docker tag sopesp2-grafana:1.0 smillermp/sopesp2-grafana:1.0
-docker push smillermp/sopesp2-grafana:1.0
+docker tag sopesp2-grafana:1.0 $registry/sopesp2-grafana:1.0
+docker push $registry/sopesp2-grafana:1.0
 cd "$pwdOriginial"
 
+cd "$pwdjson"
+docker build -t sopesp2-archivojson:1.0 .
+docker tag sopesp2-archivojson:1.0 $registry/sopesp2-archivojson:1.0
+docker push $registry/sopesp2-archivojson:1.0
 cd "$pwdOriginial"

@@ -18,7 +18,7 @@ spec:
         fsGroup: 472
       containers:
         - name: grafana
-          image: smillermp/sopesp2-grafana:latest
+          image: 34.46.182.53.nip.io/smillermp/sopesp2-grafana:1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

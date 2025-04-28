@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: sopesp2-consumer-kafka
-          image: smillermp/sopesp2-consumer-kafka:1.0 
+          image: 34.46.182.53.nip.io/smillermp/sopesp2-consumer-kafka:1.0 
           imagePullPolicy: Always
           env:
             - name: KAFKA_SERVER
