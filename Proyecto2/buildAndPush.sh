@@ -29,6 +29,8 @@ pwdConsumerKafka=./Backend/Golang/Consumer/Kafka
 pwdGoGRPC=./Backend/Golang/API_gRPC
 pwdServerGRPCKafka=./Backend/Golang/gRPC_Servers/Kafka
 pwdServerGRPCRabbit=./Backend/Golang/gRPC_Servers/RabbitMQ
+pwdRustApi=./Backend/Rust/API
+pwdGrafana=./Backend/Grafana
 
 
 # build y push de la imagen de Consumer RabbitMQ
@@ -60,6 +62,18 @@ cd "$pwdServerGRPCRabbit"
 docker build -t sopesp2-grpc-server-rabbit:1.0 .
 docker tag sopesp2-grpc-server-rabbit:1.0 smillermp/sopesp2-grpc-server-rabbit:1.0 
 docker push smillermp/sopesp2-grpc-server-rabbit:1.0 
+cd "$pwdOriginial"
+
+cd "$pwdRustApi"
+docker build -t sopesp2-rust-api:1.0 .
+docker tag sopesp2-rust-api:1.0 smillermp/sopesp2-rust-api:1.0
+docker push smillermp/sopesp2-rust-api:1.0
+cd "$pwdOriginial"
+
+cd "$pwdGrafana"
+docker build -t sopesp2-grafana:1.0 .
+docker tag sopesp2-grafana:1.0 smillermp/sopesp2-grafana:1.0
+docker push smillermp/sopesp2-grafana:1.0
 cd "$pwdOriginial"
 
 cd "$pwdOriginial"

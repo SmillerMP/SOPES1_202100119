@@ -3,18 +3,19 @@ kind: Ingress
 metadata:
   name: sopesp2-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/rewrite-target: "/$2"  # Captura la parte después de /input/
+    nginx.ingress.kubernetes.io/enable-rewrite-log: "true" 
 
 spec:
   ingressClassName: nginx
   rules:
-    - host: ""
-      http: 
+    - host: "34.69.146.211.nip.io"
+      http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /input(/|$)(.*)  # Captura todo lo que venga después de /input/
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: sopesp2-service-rust
                 port:
-                  number: 80
+                  number: 8000

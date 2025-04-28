@@ -7,6 +7,6 @@ spec:
     app: sopesp2-service-rust
   ports:
     - protocol: TCP
-      port: 80          # puesto del ingress
+      port: 8000        
       targetPort: 8000 # El puerto del contenedor
   type: ClusterIP
