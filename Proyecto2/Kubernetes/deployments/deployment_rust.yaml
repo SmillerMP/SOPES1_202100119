@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: sopesp2-rust
-          image: 34.46.182.53.nip.io/smillermp/sopesp2-rust-api:1.0
+          image: smillermp/sopesp2-rust-api:1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -30,3 +30,23 @@ spec:
             limits:
               cpu: "200m"
               memory: "512Mi"
+          
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sopesp2-hpa-rust
+spec:  
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sopesp2-deployment-rust
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60

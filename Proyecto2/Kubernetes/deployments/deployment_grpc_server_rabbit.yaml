@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: sopesp2-grpc-server-rabbitmq
-          image: 34.46.182.53.nip.io/smillermp/sopesp2-grpc-server-rabbit:1.0 
+          image: smillermp/sopesp2-grpc-server-rabbit:1.0 
           imagePullPolicy: Always
           ports:
             - containerPort: 50052

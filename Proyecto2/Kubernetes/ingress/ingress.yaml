@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: "34.69.146.211.nip.io"
+    - host: "107.178.211.162.nip.io"
       http:
         paths:
           - path: /input(/|$)(.*)  # Captura todo lo que venga después de /input/
